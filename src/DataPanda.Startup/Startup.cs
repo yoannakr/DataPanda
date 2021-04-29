@@ -1,3 +1,4 @@
+using DataPanda.Api;
 using DataPanda.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +19,7 @@ namespace DataPanda.Startup
 
         public void ConfigureServices(IServiceCollection services)
             => services
+                .AddApi()
                 .AddPersistence(Configuration);
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -25,8 +27,6 @@ namespace DataPanda.Startup
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DataPanda.Startup v1"));
             }
 
             app.UseHttpsRedirection();
