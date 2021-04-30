@@ -10,7 +10,7 @@ const Menu : React.FC<IProps> = ({ menuOptions }) => {
     return(
     <div className={styles.Menu}>
         {menuOptions.map((option) => (
-            <button type="button" className={styles.Button}>{option.name}</button>
+            <button type="button" className={styles.Button} key={option.id}>{option.name}</button>
         ))}
     </div>
   )};
