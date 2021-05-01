@@ -1,4 +1,6 @@
 using DataPanda.Api;
+using DataPanda.Application;
+using DataPanda.Infrastructure;
 using DataPanda.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +22,8 @@ namespace DataPanda.Startup
         public void ConfigureServices(IServiceCollection services)
             => services
                 .AddApi()
+                .AddApplication()
+                .AddInfrastructure()
                 .AddPersistence(Configuration);
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
