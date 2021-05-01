@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataPanda.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DataPanda.Persistence
+namespace DataPanda.Startup.IoC.Persistence
 {
-    public static class PersistenceServicesConfiguration
+    public static class PersistenceServices
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
             => services.AddDatabase(configuration);

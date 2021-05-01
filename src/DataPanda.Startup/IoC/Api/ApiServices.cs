@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace DataPanda.Api
+namespace DataPanda.Startup.IoC.Api
 {
-    public static class ApiServicesConfiguration
+    public static class ApiServices
     {
         public static IServiceCollection AddApi(this IServiceCollection services)
         {
-            services
-                .AddControllers();
+            services.AddControllers();
 
             return services;
         }

@@ -3,9 +3,9 @@ using DataPanda.Infrastructure.Parsers;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace DataPanda.Infrastructure
+namespace DataPanda.Startup.IoC.Infrastructure
 {
-    public static class InfrastructureServicesConfiguration
+    public static class InfrastructureServices
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
@@ -17,6 +17,5 @@ namespace DataPanda.Infrastructure
 
             return services;
         }
-
     }
 }

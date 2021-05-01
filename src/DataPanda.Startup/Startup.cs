@@ -1,7 +1,7 @@
-using DataPanda.Api;
-using DataPanda.Application;
-using DataPanda.Infrastructure;
-using DataPanda.Persistence;
+using DataPanda.Startup.IoC.Api;
+using DataPanda.Startup.IoC.Application;
+using DataPanda.Startup.IoC.Infrastructure;
+using DataPanda.Startup.IoC.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
