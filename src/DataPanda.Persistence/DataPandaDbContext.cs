@@ -10,8 +10,6 @@ namespace DataPanda.Persistence
         {
         }
 
-        public DbSet<ActivityLog> ActivityLogs { get; set; }
-
         public DbSet<Assignment> Assignments { get; set; }
 
         public DbSet<Course> Courses { get; set; }
@@ -19,8 +17,6 @@ namespace DataPanda.Persistence
         public DbSet<Enrolment> Enrolments { get; set; }
 
         public DbSet<FileSubmission> FileSubmissions { get; set; }
-
-        public DbSet<Grade> Grades { get; set; }
 
         public DbSet<LearningPlatform> LearningPlatforms { get; set; }
 

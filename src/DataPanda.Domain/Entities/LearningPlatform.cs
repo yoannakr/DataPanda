@@ -4,6 +4,13 @@ namespace DataPanda.Domain.Entities
 {
     public class LearningPlatform
     {
+        public LearningPlatform(string name, string type, string url)
+        {
+            Name = name;
+            Type = type;
+            Url = url;
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }

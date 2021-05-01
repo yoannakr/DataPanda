@@ -14,9 +14,7 @@ namespace DataPanda.Domain.Entities
 
         public Enrolment Enrolment { get; set; }
 
-        public int GradeId { get; set; }
-
-        public Grade Grade { get; set; }
+        public double Grade { get; set; }
 
         public ICollection<StudentEnrolmentAssignment> StudentEnrolmentAssignments { get; set; }
 

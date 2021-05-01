@@ -4,9 +4,13 @@ namespace DataPanda.Domain.Entities
 {
     public class Enrolment
     {
-        public int Id { get; set; }
+        public Enrolment(int courseId, int learningPlatformId)
+        {
+            CourseId = courseId;
+            LearningPlatformId = learningPlatformId;
+        }
 
-        public int Year { get; set; }
+        public int Id { get; set; }
 
         public int CourseId { get; set; }
 
