@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataPanda.Application\DataPanda.Application.csproj" />
     <ProjectReference Include="..\DataPanda.Domain\DataPanda.Domain.csproj" />
   </ItemGroup>
 
