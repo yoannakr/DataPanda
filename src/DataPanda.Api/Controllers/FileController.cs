@@ -1,4 +1,5 @@
 ﻿using DataPanda.Api.Extensions;
+using DataPanda.Api.InputModels.File;
 using DataPanda.Application.Contracts.CQRS.Commands;
 using DataPanda.Application.Contracts.CQRS.Results;
 using DataPanda.Application.Features.Files.Commands.Upload;
@@ -19,10 +20,18 @@ namespace DataPanda.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Upload(IFormFile formFile)
+        public async Task<ActionResult> Upload([FromForm] UploadInputModel inputModel)
         {
-            using var stream = formFile.OpenReadStream();
-            var result = await uploadFileCommandHandler.Handle(new UploadFileCommand(stream));
+            using var stream = inputModel.FormFile.OpenReadStream();
+            var command = new UploadFileCommand(
+                stream,
+                inputModel.PlatformName,
+                inputModel.PlatformType,
+                inputModel.PlatformUrl,
+                inputModel.CourseName,
+                inputModel.CourseFieldOfApplication);
+
+            var result = await uploadFileCommandHandler.Handle(command);
 
             return result.ToActionResult();
         }
