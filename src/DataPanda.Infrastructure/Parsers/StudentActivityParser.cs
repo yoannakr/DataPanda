@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataPanda.Infrastructure.Parsers
 {
-    public class StudentActivityParser : IStudentActivityParser
+    public class StudentActivityParser : IParser<StudentActivity>
     {
         public Task<Result<StudentActivity>> Parse(Stream streamToParse)
         {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataPanda.Infrastructure.Parsers
 {
-    public class StudentResultParser : IStudentResultParser
+    public class StudentResultParser : IParser<IEnumerable<StudentResult>>
     {
         public Task<Result<IEnumerable<StudentResult>>> Parse(Stream streamToParse)
         {

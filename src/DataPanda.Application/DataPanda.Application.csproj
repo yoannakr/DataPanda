@@ -10,4 +10,8 @@
     <Folder Include="Features\Files\Commands\UploadMultiple\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataPanda.Domain\DataPanda.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
