@@ -20,11 +20,11 @@ namespace DataPanda.Persistence
 
         public DbSet<Student> Students { get; set; }
 
-        public DbSet<StudentEnrolment> StudentEnrolments { get; set; }
+        public DbSet<Enrolment> Enrolments { get; set; }
 
-        public DbSet<StudentEnrolmentAssignment> StudentEnrolmentAssignments { get; set; }
+        public DbSet<EnrolmentAssignment> EnrolmentAssignments { get; set; }
 
-        public DbSet<StudentEnrolmentWiki> StudentEnrolmentWikis { get; set; }
+        public DbSet<EnrolmentWiki> EnrolmentWikis { get; set; }
 
         public DbSet<Wiki> Wikis { get; set; }
     }

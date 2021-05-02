@@ -2,7 +2,7 @@
 
 namespace DataPanda.Domain.Entities
 {
-    public class StudentEnrolmentAssignment
+    public class EnrolmentAssignment
     {
         public int Id { get; set; }
 
@@ -10,9 +10,9 @@ namespace DataPanda.Domain.Entities
 
         public Assignment Assignment { get; set; }
 
-        public int StudentEnrolmentId { get; set; }
+        public int EnrolmentId { get; set; }
 
-        public StudentEnrolment StudentEnrolment { get; set; }
+        public Enrolment Enrolment { get; set; }
 
         public ICollection<FileSubmission> FileSubmissions { get; set; }
     }

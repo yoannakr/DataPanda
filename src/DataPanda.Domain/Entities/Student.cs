@@ -6,6 +6,6 @@ namespace DataPanda.Domain.Entities
     {
         public int Id { get; set; }
 
-        public ICollection<StudentEnrolment> StudentEnrolments { get; set; }
+        public ICollection<Enrolment> Enrolments { get; set; }
     }
 }

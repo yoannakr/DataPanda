@@ -1,6 +1,6 @@
 ﻿namespace DataPanda.Domain.Entities
 {
-    public class StudentEnrolmentWiki
+    public class EnrolmentWiki
     {
         public int Id { get; set; }
 
@@ -10,8 +10,8 @@
 
         public Wiki Wiki { get; set; }
 
-        public int StudentEnrolmentId { get; set; }
+        public int EnrolmentId { get; set; }
 
-        public StudentEnrolment StudentEnrolment { get; set; }
+        public Enrolment Enrolment { get; set; }
     }
 }

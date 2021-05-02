@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
 
-        public int StudentEnrolmentAssignmentId { get; set; }
+        public int EnrolmentAssignmentId { get; set; }
 
-        public StudentEnrolmentAssignment StudentEnrolmentAssignments { get; set; }
+        public EnrolmentAssignment EnrolmentAssignments { get; set; }
     }
 }

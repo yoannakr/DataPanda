@@ -8,6 +8,6 @@ namespace DataPanda.Domain.Entities
 
         public string Name { get; set; }
 
-        public ICollection<StudentEnrolmentAssignment> StudentEnrolmentAssignments { get; set; }
+        public ICollection<EnrolmentAssignment> EnrolmentAssignments { get; set; }
     }
 }

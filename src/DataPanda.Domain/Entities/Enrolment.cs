@@ -2,7 +2,7 @@
 
 namespace DataPanda.Domain.Entities
 {
-    public class StudentEnrolment
+    public class Enrolment
     {
         public int Id { get; set; }
 
@@ -20,8 +20,8 @@ namespace DataPanda.Domain.Entities
 
         public double Grade { get; set; }
 
-        public ICollection<StudentEnrolmentAssignment> StudentEnrolmentAssignments { get; set; }
+        public ICollection<EnrolmentAssignment> EnrolmentAssignments { get; set; }
 
-        public ICollection<StudentEnrolmentWiki> StudentEnrolmentWikis { get; set; }
+        public ICollection<EnrolmentWiki> EnrolmentWikis { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace DataPanda.Domain.Entities
 
         public string Name { get; set; }
 
-        public ICollection<StudentEnrolmentWiki> StudentEnrolmentWikis { get; set; }
+        public ICollection<EnrolmentWiki> EnrolmentWikis { get; set; }
 
     }
 }
