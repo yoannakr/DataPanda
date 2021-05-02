@@ -7,6 +7,8 @@ using DataPanda.Application.Persistence.Enrolments.Commands.Create;
 using DataPanda.Application.Persistence.Enrolments.Queries.GetForStudent;
 using DataPanda.Application.Persistence.LearningPlatforms.Commands.Create;
 using DataPanda.Application.Persistence.LearningPlatforms.Queries.GetByNameAndType;
+using DataPanda.Application.Persistence.Students.Commands.Create;
+using DataPanda.Application.Persistence.Students.Queries.GetById;
 using DataPanda.Domain.Entities;
 using DataPanda.Persistence;
 using DataPanda.Persistence.Entities.Courses.Commands.Create;
@@ -15,6 +17,8 @@ using DataPanda.Persistence.Entities.Enrolments.Commands.Create;
 using DataPanda.Persistence.Entities.Enrolments.Queries.GetForStudent;
 using DataPanda.Persistence.Entities.LearningPlatforms.Commands.Create;
 using DataPanda.Persistence.Entities.LearningPlatforms.Queries.GetByNameAndType;
+using DataPanda.Persistence.Entities.Students.Commands.Create;
+using DataPanda.Persistence.Entities.Students.Queries.GetById;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,12 +43,14 @@ namespace DataPanda.Startup.IoC.Persistence
             => services
                 .AddScoped<IPersistenceCommandHandler<CreateCoursePersistenceCommand, Result>, CreateCoursePersistenceCommandHandler>()
                 .AddScoped<IPersistenceCommandHandler<CreateLearningPlatformPersistenceCommand, Result>, CreateLearningPlatformPersistenceCommandHandler>()
-                .AddScoped<IPersistenceCommandHandler<CreateEnrolmentPersistenceCommand, Result>, CreateEnrolmentPersistenceCommandHandler>();
+                .AddScoped<IPersistenceCommandHandler<CreateEnrolmentPersistenceCommand, Result>, CreateEnrolmentPersistenceCommandHandler>()
+                .AddScoped<IPersistenceCommandHandler<CreateStudentPersistenceCommand, Result>, CreateStudentPersistenceCommandHandler>();
 
         private static IServiceCollection AddQueries(this IServiceCollection services)
             => services
                 .AddScoped<IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course>, GetCourseByNamePersistenceQueryHandler>()
                 .AddScoped<IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform>, GetLearningPlatformByNameAndTypePersistenceQueryHandler>()
-                .AddScoped<IPersistenceQueryHandler<GetEnrolmentForStudentPersistenceQuery, Enrolment>, GetEnrolmentForStudentPersistenceQueryHandler>();
+                .AddScoped<IPersistenceQueryHandler<GetEnrolmentForStudentPersistenceQuery, Enrolment>, GetEnrolmentForStudentPersistenceQueryHandler>()
+                .AddScoped<IPersistenceQueryHandler<GetStudentByIdPersistenceQuery, Student>, GetStudentByIdPersistenceQueryHandler>();
     }
 }

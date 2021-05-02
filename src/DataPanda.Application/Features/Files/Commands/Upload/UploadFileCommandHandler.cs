@@ -9,6 +9,8 @@ using DataPanda.Application.Persistence.Enrolments.Commands.Create;
 using DataPanda.Application.Persistence.Enrolments.Queries.GetForStudent;
 using DataPanda.Application.Persistence.LearningPlatforms.Commands.Create;
 using DataPanda.Application.Persistence.LearningPlatforms.Queries.GetByNameAndType;
+using DataPanda.Application.Persistence.Students.Commands.Create;
+using DataPanda.Application.Persistence.Students.Queries.GetById;
 using DataPanda.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,27 +24,37 @@ namespace DataPanda.Application.Features.Files.Commands.Upload
         private readonly IPersistenceCommandHandler<CreateCoursePersistenceCommand, Result> createCoursePersistenceCommandHandler;
         private readonly IPersistenceCommandHandler<CreateLearningPlatformPersistenceCommand, Result> createLearningPlatformPersistenceCommandHandler;
         private readonly IPersistenceCommandHandler<CreateEnrolmentPersistenceCommand, Result> createEnrolmentPersistenceCommandHandler;
+        private readonly IPersistenceCommandHandler<CreateStudentPersistenceCommand, Result> createStudentPersistenceCommandHandler;
 
         private readonly IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetEnrolmentForStudentPersistenceQuery, Enrolment> getEnrolmentForStudentPersistenceQueryHandler;
+        private readonly IPersistenceQueryHandler<GetStudentByIdPersistenceQuery, Student> getStudentByIdPersistenceQueryHandler;
 
         public UploadFileCommandHandler(
             IParser<IEnumerable<StudentResult>> studentResultParser,
             IPersistenceCommandHandler<CreateCoursePersistenceCommand, Result> createCoursePersistenceCommandHandler,
-            IPersistenceCommandHandler<CreateLearningPlatformPersistenceCommand, Result> createLearningPlatformPersistenceCommandHandler,
             IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler,
+            IPersistenceCommandHandler<CreateLearningPlatformPersistenceCommand, Result> createLearningPlatformPersistenceCommandHandler,
             IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler,
             IPersistenceCommandHandler<CreateEnrolmentPersistenceCommand, Result> createEnrolmentPersistenceCommandHandler,
-            IPersistenceQueryHandler<GetEnrolmentForStudentPersistenceQuery, Enrolment> getEnrolmentForStudentPersistenceQueryHandler)
+            IPersistenceQueryHandler<GetEnrolmentForStudentPersistenceQuery, Enrolment> getEnrolmentForStudentPersistenceQueryHandler,
+            IPersistenceCommandHandler<CreateStudentPersistenceCommand, Result> createStudentPersistenceCommandHandler,
+            IPersistenceQueryHandler<GetStudentByIdPersistenceQuery, Student> getStudentByIdPersistenceQueryHandler)
         {
             this.studentResultParser = studentResultParser;
+
             this.createCoursePersistenceCommandHandler = createCoursePersistenceCommandHandler;
-            this.createLearningPlatformPersistenceCommandHandler = createLearningPlatformPersistenceCommandHandler;
             this.getCourseByNamePersistenceQueryHandler = getCourseByNamePersistenceQueryHandler;
+
+            this.createLearningPlatformPersistenceCommandHandler = createLearningPlatformPersistenceCommandHandler;
             this.getLearningPlatformByNameAndTypePersistenceQueryHandler = getLearningPlatformByNameAndTypePersistenceQueryHandler;
+
             this.createEnrolmentPersistenceCommandHandler = createEnrolmentPersistenceCommandHandler;
             this.getEnrolmentForStudentPersistenceQueryHandler = getEnrolmentForStudentPersistenceQueryHandler;
+
+            this.createStudentPersistenceCommandHandler = createStudentPersistenceCommandHandler;
+            this.getStudentByIdPersistenceQueryHandler = getStudentByIdPersistenceQueryHandler;
         }
 
         public async Task<Result> Handle(UploadFileCommand command)
@@ -74,6 +86,18 @@ namespace DataPanda.Application.Features.Files.Commands.Upload
             var result = await studentResultParser.Parse(command.FileStream);
             foreach (var studentResult in result.SuccessPayload)
             {
+                var student = await getStudentByIdPersistenceQueryHandler.Handle(new GetStudentByIdPersistenceQuery(studentResult.Id));
+                if (student is null)
+                {
+                    student = new Student(studentResult.Id);
+                    var createStudentResult = await createStudentPersistenceCommandHandler.Handle(new CreateStudentPersistenceCommand(student));
+
+                    if (!createStudentResult.Succeeded)
+                    {
+                        return createStudentResult.FailurePayload;
+                    }
+                }
+
                 var enrolment = await getEnrolmentForStudentPersistenceQueryHandler.Handle(new GetEnrolmentForStudentPersistenceQuery(studentResult.Id, course.Id, learningPlatform.Id));
                 if (enrolment is null)
                 {
