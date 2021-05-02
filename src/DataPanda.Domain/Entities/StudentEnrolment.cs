@@ -6,13 +6,17 @@ namespace DataPanda.Domain.Entities
     {
         public int Id { get; set; }
 
+        public int CourseId { get; set; }
+
+        public Course Course { get; set; }
+
+        public int LearningPlatformId { get; set; }
+
+        public LearningPlatform LearningPlatform { get; set; }
+
         public int StudentId { get; set; }
 
         public Student Student { get; set; }
-
-        public int EnrolmentId { get; set; }
-
-        public Enrolment Enrolment { get; set; }
 
         public double Grade { get; set; }
 

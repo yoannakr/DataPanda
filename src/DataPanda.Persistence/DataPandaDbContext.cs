@@ -14,8 +14,6 @@ namespace DataPanda.Persistence
 
         public DbSet<Course> Courses { get; set; }
 
-        public DbSet<Enrolment> Enrolments { get; set; }
-
         public DbSet<FileSubmission> FileSubmissions { get; set; }
 
         public DbSet<LearningPlatform> LearningPlatforms { get; set; }

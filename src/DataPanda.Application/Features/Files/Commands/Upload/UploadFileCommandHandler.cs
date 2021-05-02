@@ -28,7 +28,6 @@ namespace DataPanda.Application.Features.Files.Commands.Upload
 
         public async Task<Result> Handle(UploadFileCommand command)
         {
-            var result = await studentResultParser.Parse(command.FileStream);
 
             var course = new Course(command.CourseName, command.CourseFieldOfApplication);
             //var res = await createCoursePersistenceCommandHandler.Handle(new CreateCoursePersistenceCommand(course));
@@ -36,9 +35,9 @@ namespace DataPanda.Application.Features.Files.Commands.Upload
             var learningPlatform = new LearningPlatform(command.PlatformName, command.PlatformType, command.PlatformUrl);
             var re = await createLearningPlatformPersistenceCommandHandler.Handle(new CreateLearningPlatformPersistenceCommand(learningPlatform));
 
+            var result = await studentResultParser.Parse(command.FileStream);
             foreach (var studentResult in result.SuccessPayload)
             {
-                var enrolment = new Enrolment(course.Id, learningPlatform.Id);
             }
 
             return Result.Success();
