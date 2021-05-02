@@ -27,5 +27,12 @@ namespace DataPanda.Persistence
         public DbSet<EnrolmentWiki> EnrolmentWikis { get; set; }
 
         public DbSet<Wiki> Wikis { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        }
     }
 }
