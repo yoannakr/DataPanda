@@ -1,8 +1,10 @@
 ﻿using DataPanda.Application.Contracts.CQRS.Commands;
 using DataPanda.Application.Contracts.CQRS.Results;
 using DataPanda.Application.Persistence.Courses.Commands.Create;
+using DataPanda.Application.Persistence.LearningPlatforms.Commands.Create;
 using DataPanda.Persistence;
 using DataPanda.Persistence.Entities.Courses.Commands.Create;
+using DataPanda.Persistence.Entities.LearningPlatforms.Commands.Create;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +25,8 @@ namespace DataPanda.Startup.IoC.Persistence
                     sqlServer => sqlServer.MigrationsAssembly(typeof(DataPandaDbContext).Assembly.FullName)));
 
         private static IServiceCollection AddCommands(this IServiceCollection services)
-            => services.AddScoped<IPersistenceCommandHandler<CreateCoursePersistenceCommand, Result>, CreateCoursePersistenceCommandHandler>();
+            => services
+                .AddScoped<IPersistenceCommandHandler<CreateCoursePersistenceCommand, Result>, CreateCoursePersistenceCommandHandler>()
+                .AddScoped<IPersistenceCommandHandler<CreateLearningPlatformPersistenceCommand, Result>, CreateLearningPlatformPersistenceCommandHandler>();
     }
 }
