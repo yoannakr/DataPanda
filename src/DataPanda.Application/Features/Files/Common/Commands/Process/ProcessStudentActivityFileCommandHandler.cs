@@ -59,8 +59,11 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
                     var matches = Regex.Matches(studentActivity.Description, @"(?<=')\d+(?=')");
 
                     var studentId = int.Parse(matches[0].Value);
+                    var fileSubmissionId = int.Parse(matches[1].Value);
+                    var assignmentId = int.Parse(matches[2].Value);
 
                     var enrolment = await getEnrolmentForStudentPersistenceQueryHandler.Handle(new GetEnrolmentForStudentPersistenceQuery(studentId, course.Id, learningPlatform.Id));
+                    var assignment = new Assignment(assignmentId, "Качване на курсови задачи и проекти");
                 }
                 else if (studentActivity.Component == "Wiki" && studentActivity.EventName == "Wiki page updated")
                 {
