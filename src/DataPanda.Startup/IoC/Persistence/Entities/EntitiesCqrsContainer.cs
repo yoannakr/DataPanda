@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using DataPanda.Startup.IoC.Persistence.Entities.Assignments;
 using DataPanda.Startup.IoC.Persistence.Entities.Courses;
+using DataPanda.Startup.IoC.Persistence.Entities.EnrolmentAssignments;
 using DataPanda.Startup.IoC.Persistence.Entities.Enrolments;
 using DataPanda.Startup.IoC.Persistence.Entities.LearningPlatforms;
 using DataPanda.Startup.IoC.Persistence.Entities.Students;
@@ -13,6 +14,7 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
         {
             RegisterAssignmentCqrs(builder);
             RegisterCourseCqrs(builder);
+            RegisterEnrolmentAssignmentCqrs(builder);
             RegisterEnrolmentCqrs(builder);
             RegisterLearningPlatformCqrs(builder);
             RegisterStudentCqrs(builder);
@@ -27,6 +29,11 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
         {
             CourseCommandsContainer.Register(builder);
             CourseQueriesContainer.Register(builder);
+        }
+
+        private static void RegisterEnrolmentAssignmentCqrs(ContainerBuilder builder)
+        {
+            EnrolmentAssignmentCommandsContainer.Register(builder);
         }
 
         private static void RegisterEnrolmentCqrs(ContainerBuilder builder)
