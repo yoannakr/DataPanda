@@ -3,6 +3,7 @@ using DataPanda.Startup.IoC.Persistence.Entities.Assignments;
 using DataPanda.Startup.IoC.Persistence.Entities.Courses;
 using DataPanda.Startup.IoC.Persistence.Entities.EnrolmentAssignments;
 using DataPanda.Startup.IoC.Persistence.Entities.Enrolments;
+using DataPanda.Startup.IoC.Persistence.Entities.FileSubmissions;
 using DataPanda.Startup.IoC.Persistence.Entities.LearningPlatforms;
 using DataPanda.Startup.IoC.Persistence.Entities.Students;
 
@@ -16,6 +17,7 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
             RegisterCourseCqrs(builder);
             RegisterEnrolmentAssignmentCqrs(builder);
             RegisterEnrolmentCqrs(builder);
+            RegisterFileSubmissonCqrs(builder);
             RegisterLearningPlatformCqrs(builder);
             RegisterStudentCqrs(builder);
         }
@@ -40,6 +42,11 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
         {
             EnrolmentCommandsContainer.Register(builder);
             EnrolmentQueriresContainer.Register(builder);
+        }
+
+        private static void RegisterFileSubmissonCqrs(ContainerBuilder builder)
+        {
+            FileSubmissonCommandsContainer.Register(builder);
         }
 
         private static void RegisterLearningPlatformCqrs(ContainerBuilder builder)
