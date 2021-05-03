@@ -1,3 +1,4 @@
+using Autofac;
 using DataPanda.Startup.IoC.Api;
 using DataPanda.Startup.IoC.Application;
 using DataPanda.Startup.IoC.Infrastructure;
@@ -22,9 +23,13 @@ namespace DataPanda.Startup
         public void ConfigureServices(IServiceCollection services)
             => services
                 .AddApi()
-                .AddApplication()
-                .AddInfrastructure()
                 .AddPersistence(Configuration);
+
+        public void ConfigureContainer(ContainerBuilder builder)
+            => builder
+                .RegisterApplication()
+                .RegisterPersistence()
+                .RegisterInfrastructure();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
