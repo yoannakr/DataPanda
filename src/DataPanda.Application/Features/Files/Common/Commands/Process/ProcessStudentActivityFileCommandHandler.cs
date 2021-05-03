@@ -3,6 +3,7 @@ using DataPanda.Application.Contracts.CQRS.Queries;
 using DataPanda.Application.Contracts.CQRS.Results;
 using DataPanda.Application.Contracts.Parsers;
 using DataPanda.Application.Features.Files.Models;
+using DataPanda.Application.Persistence.Assignments.Commands.Create;
 using DataPanda.Application.Persistence.Courses.Queries.GetByName;
 using DataPanda.Application.Persistence.Enrolments.Queries.GetForStudent;
 using DataPanda.Application.Persistence.LearningPlatforms.Queries.GetByNameAndType;
@@ -18,6 +19,8 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
     {
         private readonly IParser<IEnumerable<StudentActivity>> studentActivityParser;
 
+        private readonly IPersistenceCommandHandler<CreateAssignmentPersistenceCommand, Result> createAssignmentPersistenceCommandHandler;
+
         private readonly IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetEnrolmentForStudentPersistenceQuery, Enrolment> getEnrolmentForStudentPersistenceQueryHandler;
@@ -26,12 +29,16 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
         public ProcessStudentActivityFileCommandHandler(
             IParser<IEnumerable<StudentActivity>> studentActivityParser,
 
+            IPersistenceCommandHandler<CreateAssignmentPersistenceCommand, Result> createAssignmentPersistenceCommandHandler,
+
             IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler,
             IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler,
             IPersistenceQueryHandler<GetEnrolmentForStudentPersistenceQuery, Enrolment> getEnrolmentForStudentPersistenceQueryHandler,
             IPersistenceQueryHandler<GetStudentByIdPersistenceQuery, Student> getStudentByIdPersistenceQueryHandler)
         {
             this.studentActivityParser = studentActivityParser;
+
+            this.createAssignmentPersistenceCommandHandler = createAssignmentPersistenceCommandHandler;
 
             this.getCourseByNamePersistenceQueryHandler = getCourseByNamePersistenceQueryHandler;
             this.getLearningPlatformByNameAndTypePersistenceQueryHandler = getLearningPlatformByNameAndTypePersistenceQueryHandler;
@@ -64,6 +71,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
 
                     var enrolment = await getEnrolmentForStudentPersistenceQueryHandler.Handle(new GetEnrolmentForStudentPersistenceQuery(studentId, course.Id, learningPlatform.Id));
                     var assignment = new Assignment(assignmentId, "Качване на курсови задачи и проекти");
+                    await createAssignmentPersistenceCommandHandler.Handle(new CreateAssignmentPersistenceCommand(assignment));
                 }
                 else if (studentActivity.Component == "Wiki" && studentActivity.EventName == "Wiki page updated")
                 {
