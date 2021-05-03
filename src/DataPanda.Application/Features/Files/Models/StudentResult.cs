@@ -8,8 +8,8 @@
             Result = result;
         }
 
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public double Result { get; set; }
+        public double Result { get; }
     }
 }

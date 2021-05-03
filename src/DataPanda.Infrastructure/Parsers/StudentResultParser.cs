@@ -15,7 +15,7 @@ namespace DataPanda.Infrastructure.Parsers
         public Task<Result<IEnumerable<StudentResult>>> Parse(Stream streamToParse)
         {
             streamToParse.Position = 0;
-            using var reader = ExcelReaderFactory.CreateReader(streamToParse);
+            var reader = ExcelReaderFactory.CreateReader(streamToParse);
 
             var studentResults = new List<StudentResult>();
             var isHeaderRow = true;
@@ -24,17 +24,23 @@ namespace DataPanda.Infrastructure.Parsers
             {
                 if (isHeaderRow)
                 {
+                    var idHeader = reader.GetValue(0)?.ToString();
+                    if (idHeader is null || idHeader != "ID")
+                    {
+                        return Result.Failure<IEnumerable<StudentResult>>("The file type is not StudentResult.");
+                    }
+
                     isHeaderRow = false;
                     continue;
                 }
 
-                var studentIdParseResult = ParseColumnValue(reader.GetValue(0).ToString(), int.Parse);
+                var studentIdParseResult = ParseColumnValue(reader.GetValue(0)?.ToString(), int.Parse);
                 if (!studentIdParseResult.Succeeded)
                 {
                     return Result.Failure<IEnumerable<StudentResult>>(studentIdParseResult.FailurePayload);
                 }
 
-                var studentResultParseResult = ParseColumnValue(reader.GetValue(1).ToString(), double.Parse);
+                var studentResultParseResult = ParseColumnValue(reader.GetValue(1)?.ToString(), double.Parse);
                 if (!studentResultParseResult.Succeeded)
                 {
                     return Result.Failure<IEnumerable<StudentResult>>(studentIdParseResult.FailurePayload);

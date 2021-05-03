@@ -17,7 +17,7 @@ namespace DataPanda.Startup.IoC.Infrastructure.Parsers
 
             builder
                 .RegisterType<StudentActivityParser>()
-                .As<IParser<StudentActivity>>()
+                .As<IParser<IEnumerable<StudentActivity>>>()
                 .InstancePerLifetimeScope();
         }
     }

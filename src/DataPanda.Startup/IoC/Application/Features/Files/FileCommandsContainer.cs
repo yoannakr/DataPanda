@@ -35,6 +35,11 @@ namespace DataPanda.Startup.IoC.Application.Features.Files
                 .RegisterType<ProcessStudentResultFileCommandHandler>()
                 .As<ICommandHandler<ProcessFileCommand, Result>>()
                 .InstancePerLifetimeScope();
+
+            builder
+                .RegisterType<ProcessStudentActivityFileCommandHandler>()
+                .As<ICommandHandler<ProcessFileCommand, Result>>()
+                .InstancePerLifetimeScope();
         }
     }
 }

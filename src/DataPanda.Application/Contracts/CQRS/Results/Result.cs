@@ -16,7 +16,7 @@ namespace DataPanda.Application.Contracts.CQRS.Results
 
         public static Result<TSuccessPayload> Success<TSuccessPayload>(TSuccessPayload successPayload) => new(true, default!, successPayload);
 
-        public static Result<TSuccessPayload> Failure<TSuccessPayload>(string failurePayload) => new(true, failurePayload, default!);
+        public static Result<TSuccessPayload> Failure<TSuccessPayload>(string failurePayload) => new(false, failurePayload, default!);
 
         public bool Succeeded { get; }
 

@@ -52,34 +52,51 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
         public async Task<Result> Handle(ProcessFileCommand command)
         {
             var studentResultParsingResult = await studentResultParser.Parse(command.FileStream);
+            if (!studentResultParsingResult.Succeeded)
+            {
+                return studentResultParsingResult.FailurePayload;
+            }
 
             var course = await getCourseByNamePersistenceQueryHandler.Handle(new GetCourseByNamePersistenceQuery(command.CourseName));
             var learningPlatform = await getLearningPlatformByNameAndTypePersistenceQueryHandler.Handle(new GetLearningPlatformByNameAndTypePersistenceQuery(command.LearningPlatformName, command.LearningPlatformType));
 
             foreach (var studentResult in studentResultParsingResult.SuccessPayload)
             {
-                var student = await getStudentByIdPersistenceQueryHandler.Handle(new GetStudentByIdPersistenceQuery(studentResult.Id));
-                if (student is null)
-                {
-                    student = new Student(studentResult.Id);
-                    var createStudentResult = await createStudentPersistenceCommandHandler.Handle(new CreateStudentPersistenceCommand(student));
+                await CreateStudentIfNotExist(studentResult.Id);
+                await CreateEnrolmentIfNotExist(course.Id, learningPlatform.Id, studentResult.Id, studentResult.Result);
+            }
 
-                    if (!createStudentResult.Succeeded)
-                    {
-                        return createStudentResult.FailurePayload;
-                    }
+            return Result.Success();
+        }
+
+        private async Task<Result> CreateStudentIfNotExist(int studentId)
+        {
+            var student = await getStudentByIdPersistenceQueryHandler.Handle(new GetStudentByIdPersistenceQuery(studentId));
+            if (student is null)
+            {
+                student = new Student(studentId);
+                var createStudentResult = await createStudentPersistenceCommandHandler.Handle(new CreateStudentPersistenceCommand(student));
+
+                if (!createStudentResult.Succeeded)
+                {
+                    return createStudentResult.FailurePayload;
                 }
+            }
 
-                var enrolment = await getEnrolmentForStudentPersistenceQueryHandler.Handle(new GetEnrolmentForStudentPersistenceQuery(studentResult.Id, course.Id, learningPlatform.Id));
-                if (enrolment is null)
+            return Result.Success();
+        }
+
+        private async Task<Result> CreateEnrolmentIfNotExist(int courseId, int learningPlatformId, int studentId, double studentResult)
+        {
+            var enrolment = await getEnrolmentForStudentPersistenceQueryHandler.Handle(new GetEnrolmentForStudentPersistenceQuery(studentId, courseId, learningPlatformId));
+            if (enrolment is null)
+            {
+                enrolment = new Enrolment(courseId, learningPlatformId, studentId, studentResult);
+                var createEnrolmentResult = await createEnrolmentPersistenceCommandHandler.Handle(new CreateEnrolmentPersistenceCommand(enrolment));
+
+                if (!createEnrolmentResult.Succeeded)
                 {
-                    enrolment = new Enrolment(course.Id, learningPlatform.Id, studentResult.Id, studentResult.Result);
-                    var createEnrolmentResult = await createEnrolmentPersistenceCommandHandler.Handle(new CreateEnrolmentPersistenceCommand(enrolment));
-
-                    if (!createEnrolmentResult.Succeeded)
-                    {
-                        return createEnrolmentResult.FailurePayload;
-                    }
+                    return createEnrolmentResult.FailurePayload;
                 }
             }
 
