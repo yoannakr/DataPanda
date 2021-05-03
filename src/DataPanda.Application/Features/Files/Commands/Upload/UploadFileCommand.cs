@@ -1,37 +1,22 @@
-﻿using DataPanda.Application.Contracts.CQRS.Commands;
-using DataPanda.Application.Contracts.CQRS.Results;
+﻿using DataPanda.Application.Features.Files.Common.Commands;
 using System.IO;
 
 namespace DataPanda.Application.Features.Files.Commands.Upload
 {
-    public class UploadFileCommand : ICommand<Result>
+    public class UploadFileCommand : FileCommand
     {
         public UploadFileCommand(
-            Stream fileStream,
             string platformName,
             string platformType,
             string platformUrl,
             string courseName,
-            string courseFieldOfApplication)
+            string courseFieldOfApplication,
+            Stream fileStream)
+            : base(platformName, platformType, platformUrl, courseName, courseFieldOfApplication)
         {
             FileStream = fileStream;
-            PlatformName = platformName;
-            PlatformType = platformType;
-            PlatformUrl = platformUrl;
-            CourseName = courseName;
-            CourseFieldOfApplication = courseFieldOfApplication;
         }
 
         public Stream FileStream { get; }
-
-        public string PlatformName { get; }
-
-        public string PlatformType { get; }
-
-        public string PlatformUrl { get; }
-
-        public string CourseName { get; }
-
-        public string CourseFieldOfApplication { get; }
     }
 }

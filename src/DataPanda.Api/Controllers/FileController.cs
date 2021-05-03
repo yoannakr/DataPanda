@@ -24,12 +24,12 @@ namespace DataPanda.Api.Controllers
         {
             using var stream = inputModel.FormFile.OpenReadStream();
             var command = new UploadFileCommand(
-                stream,
                 inputModel.PlatformName,
                 inputModel.PlatformType,
                 inputModel.PlatformUrl,
                 inputModel.CourseName,
-                inputModel.CourseFieldOfApplication);
+                inputModel.CourseFieldOfApplication,
+                stream);
 
             var result = await uploadFileCommandHandler.Handle(command);
 
