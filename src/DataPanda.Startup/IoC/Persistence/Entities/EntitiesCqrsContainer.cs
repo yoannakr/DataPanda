@@ -53,6 +53,7 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
         private static void RegisterEnrolmentWikiCqrs(ContainerBuilder builder)
         {
             EnrolmentWikiCommandsContainer.Register(builder);
+            EnrolmentWikiQueriesContainer.Register(builder);
         }
 
         private static void RegisterFileSubmissonCqrs(ContainerBuilder builder)
