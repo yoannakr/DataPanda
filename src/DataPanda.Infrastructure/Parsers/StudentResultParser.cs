@@ -37,13 +37,13 @@ namespace DataPanda.Infrastructure.Parsers
                 var studentIdParseResult = ParseColumnValue(reader.GetValue(0)?.ToString(), int.Parse);
                 if (!studentIdParseResult.Succeeded)
                 {
-                    return Result.Failure<IEnumerable<StudentResult>>(studentIdParseResult.FailurePayload);
+                    continue;
                 }
 
                 var studentResultParseResult = ParseColumnValue(reader.GetValue(1)?.ToString(), double.Parse);
                 if (!studentResultParseResult.Succeeded)
                 {
-                    return Result.Failure<IEnumerable<StudentResult>>(studentIdParseResult.FailurePayload);
+                    continue;
                 }
 
                 var studentResult = new StudentResult(studentIdParseResult.SuccessPayload, studentResultParseResult.SuccessPayload);

@@ -16,7 +16,6 @@ namespace DataPanda.Infrastructure.Parsers
             streamToParse.Position = 0;
             var reader = ExcelReaderFactory.CreateReader(streamToParse);
 
-            var failedResult = Task.FromResult(Result.Failure<IEnumerable<StudentActivity>>("The file contains an invalid column value."));
             var studentActivities = new List<StudentActivity>();
             var isHeaderRow = true;
 
@@ -37,25 +36,25 @@ namespace DataPanda.Infrastructure.Parsers
                 var eventContext = reader.GetValue(1)?.ToString();
                 if (eventContext is null)
                 {
-                    return failedResult;
+                    continue;
                 }
 
                 var component = reader.GetValue(2)?.ToString();
                 if (component is null)
                 {
-                    return failedResult;
+                    continue;
                 }
 
                 var eventName = reader.GetValue(3)?.ToString();
                 if (eventName is null)
                 {
-                    return failedResult;
+                    continue;
                 }
 
                 var description = reader.GetValue(4)?.ToString();
                 if (description is null)
                 {
-                    return failedResult;
+                    continue;
                 }
 
                 var studentActivity = new StudentActivity(eventContext, component, eventName, description);

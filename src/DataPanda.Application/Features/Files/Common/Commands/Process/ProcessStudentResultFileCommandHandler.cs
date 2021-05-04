@@ -5,6 +5,7 @@ using DataPanda.Application.Contracts.Parsers;
 using DataPanda.Application.Features.Files.Models;
 using DataPanda.Application.Persistence.Courses.Queries.GetByName;
 using DataPanda.Application.Persistence.Enrolments.Commands.Create;
+using DataPanda.Application.Persistence.Enrolments.Commands.Update;
 using DataPanda.Application.Persistence.Enrolments.Queries.GetForStudent;
 using DataPanda.Application.Persistence.LearningPlatforms.Queries.GetByNameAndType;
 using DataPanda.Application.Persistence.Students.Commands.Create;
@@ -21,6 +22,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
 
         private readonly IPersistenceCommandHandler<CreateEnrolmentPersistenceCommand, Result> createEnrolmentPersistenceCommandHandler;
         private readonly IPersistenceCommandHandler<CreateStudentPersistenceCommand, Result> createStudentPersistenceCommandHandler;
+        private readonly IPersistenceCommandHandler<UpdateEnrolmentPersistenceCommand, Result> updateEnrolmentPersistenceCommandHandler;
 
         private readonly IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler;
@@ -32,6 +34,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
 
             IPersistenceCommandHandler<CreateEnrolmentPersistenceCommand, Result> createEnrolmentPersistenceCommandHandler,
             IPersistenceCommandHandler<CreateStudentPersistenceCommand, Result> createStudentPersistenceCommandHandler,
+            IPersistenceCommandHandler<UpdateEnrolmentPersistenceCommand, Result> updateEnrolmentPersistenceCommandHandler,
 
             IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler,
             IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler,
@@ -42,6 +45,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
 
             this.createEnrolmentPersistenceCommandHandler = createEnrolmentPersistenceCommandHandler;
             this.createStudentPersistenceCommandHandler = createStudentPersistenceCommandHandler;
+            this.updateEnrolmentPersistenceCommandHandler = updateEnrolmentPersistenceCommandHandler;
 
             this.getCourseByNamePersistenceQueryHandler = getCourseByNamePersistenceQueryHandler;
             this.getLearningPlatformByNameAndTypePersistenceQueryHandler = getLearningPlatformByNameAndTypePersistenceQueryHandler;
@@ -63,7 +67,11 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             foreach (var studentResult in studentResultParsingResult.SuccessPayload)
             {
                 await CreateStudentIfNotExist(studentResult.Id);
-                await CreateEnrolmentIfNotExist(course.Id, learningPlatform.Id, studentResult.Id, studentResult.Result);
+                var createEnrolmentResult = await CreateEnrolmentIfNotExist(course.Id, learningPlatform.Id, studentResult.Id, 0);
+
+                var enrolment = createEnrolmentResult.SuccessPayload;
+                enrolment.Grade = studentResult.Result;
+                await updateEnrolmentPersistenceCommandHandler.Handle(new UpdateEnrolmentPersistenceCommand(enrolment));
             }
 
             return Result.Success();
@@ -86,7 +94,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             return Result.Success();
         }
 
-        private async Task<Result> CreateEnrolmentIfNotExist(int courseId, int learningPlatformId, int studentId, double studentResult)
+        private async Task<Result<Enrolment>> CreateEnrolmentIfNotExist(int courseId, int learningPlatformId, int studentId, double studentResult)
         {
             var enrolment = await getEnrolmentForStudentPersistenceQueryHandler.Handle(new GetEnrolmentForStudentPersistenceQuery(studentId, courseId, learningPlatformId));
             if (enrolment is null)
@@ -100,7 +108,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
                 }
             }
 
-            return Result.Success();
+            return enrolment;
         }
     }
 }
