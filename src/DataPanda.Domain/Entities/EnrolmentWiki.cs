@@ -2,6 +2,13 @@
 {
     public class EnrolmentWiki
     {
+        public EnrolmentWiki(int wikiId, int enrolmentId, int numberOfEdits)
+        {
+            WikiId = wikiId;
+            EnrolmentId = enrolmentId;
+            NumberOfEdits = numberOfEdits;
+        }
+
         public int Id { get; set; }
 
         public int NumberOfEdits { get; set; }
