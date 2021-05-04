@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Files\Commands\UploadArchive\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DataPanda.Domain\DataPanda.Domain.csproj" />
   </ItemGroup>
 

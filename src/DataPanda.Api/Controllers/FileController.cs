@@ -3,6 +3,7 @@ using DataPanda.Api.InputModels.File;
 using DataPanda.Application.Contracts.CQRS.Commands;
 using DataPanda.Application.Contracts.CQRS.Results;
 using DataPanda.Application.Features.Files.Commands.Upload;
+using DataPanda.Application.Features.Files.Commands.UploadArchive;
 using DataPanda.Application.Features.Files.Commands.UploadMultiple;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +17,16 @@ namespace DataPanda.Api.Controllers
     {
         private readonly ICommandHandler<UploadFileCommand, Result> uploadFileCommandHandler;
         private readonly ICommandHandler<UploadMultipleFilesCommand, Result> uploadMultipleFilesCommandHandler;
+        private readonly ICommandHandler<UploadFileArchiveCommand, Result> uploadFileArchiveCommandHandler;
 
         public FileController(
             ICommandHandler<UploadFileCommand, Result> uploadFileCommandHandler,
-            ICommandHandler<UploadMultipleFilesCommand, Result> uploadMultipleFilesCommandHandler)
+            ICommandHandler<UploadMultipleFilesCommand, Result> uploadMultipleFilesCommandHandler,
+            ICommandHandler<UploadFileArchiveCommand, Result> uploadFileArchiveCommandHandler)
         {
             this.uploadFileCommandHandler = uploadFileCommandHandler;
             this.uploadMultipleFilesCommandHandler = uploadMultipleFilesCommandHandler;
+            this.uploadFileArchiveCommandHandler = uploadFileArchiveCommandHandler;
         }
 
         [HttpPost]
@@ -71,9 +75,20 @@ namespace DataPanda.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> UploadArchive(IFormFile formFileArchive)
+        public async Task<ActionResult> UploadArchive([FromForm] UploadArchiveInputModel inputModel)
         {
-            return new OkResult();
+            using var stream = inputModel.FormFile.OpenReadStream();
+            var command = new UploadFileArchiveCommand(
+                inputModel.PlatformName,
+                inputModel.PlatformType,
+                inputModel.PlatformUrl,
+                inputModel.CourseName,
+                inputModel.CourseFieldOfApplication,
+                stream);
+
+            var result = await uploadFileArchiveCommandHandler.Handle(command);
+
+            return result.ToActionResult();
         }
     }
 }
