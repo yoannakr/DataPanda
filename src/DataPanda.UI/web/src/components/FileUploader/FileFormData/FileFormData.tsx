@@ -47,9 +47,9 @@ const FormData: React.FC<IProps> = ({ enrolment, updateEnrolment }) => {
 				</div>
 				<div className={styles.Column}>
 					<span>Тип на платформата</span>
-					<select id="platformType" name="platformType" onChange={e => onPlatformTypeChange(+e.target.value)}>
+					<select id="platformType" name="platformType" value={newEnrolment?.typeOfPlatform?.id} onChange={e => onPlatformTypeChange(+e.target.value)}>
 						{platformTypes.map(platformType => (
-							<option key={platformType.id} value={platformType.id} selected={newEnrolment?.typeOfPlatform?.id === platformType.id}>{platformType.name}</option>))}
+							<option key={platformType.id} value={platformType.id}>{platformType.name}</option>))}
 					</select>
 				</div>
 				<div className={styles.Column}>

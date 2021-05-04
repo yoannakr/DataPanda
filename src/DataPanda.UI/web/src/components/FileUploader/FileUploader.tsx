@@ -48,7 +48,7 @@ const FileUploader = () => {
 	switch (currentStep) {
 		case 1:
 			result.push(
-				<div>
+				<div key={currentStep}>
 					<StepProgressBar countOfSteps={countOfSteps} currentStep={1} />
 					<FileOption fileOptions={fileOptions} selectOption={selectOption} selectedOption={selectedOption} />
 				</div>
@@ -56,7 +56,7 @@ const FileUploader = () => {
 			break;
 		case 2:
 			result.push(
-				<div>
+				<div key={currentStep}>
 					<StepProgressBar countOfSteps={countOfSteps} currentStep={2} />
 					<FormData enrolment={enrolment} updateEnrolment={updateEnrolment} />
 				</div>
@@ -64,7 +64,7 @@ const FileUploader = () => {
 			break;
 		case 3:
 			result.push(
-				<div>
+				<div key={currentStep}>
 					<StepProgressBar countOfSteps={countOfSteps} currentStep={3} />
 					<FileSelection selectedOption={selectedOption} />
 				</div>
@@ -74,7 +74,7 @@ const FileUploader = () => {
 			break;
 	}
 	result.push(
-		<div className={styles.Button}>
+		<div className={styles.Button} key={countOfSteps + 1}>
 			{currentStep > 1 ? <button type="button" onClick={decrementStep} className={styles.Previous}>Назад</button> : ""}
 			{currentStep <= countOfSteps - 1 ? <button type="button" onClick={incrementStep} className={styles.Next}>Напред</button> : ""}
 		</div>

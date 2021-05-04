@@ -9,7 +9,7 @@ interface IProps {
 const StepProgressBar: React.FC<IProps> = ({ countOfSteps, currentStep }) => {
 	const steps = [];
 	for (let i = 0; i < countOfSteps; i += 1) {
-		steps.push(<li className={i <= currentStep - 1 ? styles.Active : ""} />);
+		steps.push(<li key={i} className={i <= currentStep - 1 ? styles.Active : ""} />);
 	}
 	return (
 		<div className={styles.Container}>
