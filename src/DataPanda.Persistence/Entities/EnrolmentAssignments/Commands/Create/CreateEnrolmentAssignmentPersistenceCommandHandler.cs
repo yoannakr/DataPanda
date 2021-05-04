@@ -3,7 +3,7 @@ using DataPanda.Application.Contracts.CQRS.Results;
 using DataPanda.Application.Persistence.EnrolmentAssignments.Commands.Create;
 using System.Threading.Tasks;
 
-namespace DataPanda.Persistence.Entities.EnrolmentAssignment.Commands.Create
+namespace DataPanda.Persistence.Entities.EnrolmentAssignments.Commands.Create
 {
     public class CreateEnrolmentAssignmentPersistenceCommandHandler : IPersistenceCommandHandler<CreateEnrolmentAssignmentPersistenceCommand, Result>
     {

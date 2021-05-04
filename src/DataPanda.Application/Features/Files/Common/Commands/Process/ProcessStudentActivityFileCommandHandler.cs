@@ -7,6 +7,7 @@ using DataPanda.Application.Persistence.Assignments.Commands.Create;
 using DataPanda.Application.Persistence.Assignments.Queries.GetById;
 using DataPanda.Application.Persistence.Courses.Queries.GetByName;
 using DataPanda.Application.Persistence.EnrolmentAssignments.Commands.Create;
+using DataPanda.Application.Persistence.EnrolmentAssignments.Queries.GetByAssignmentAndEnrolmentIds;
 using DataPanda.Application.Persistence.Enrolments.Commands.Create;
 using DataPanda.Application.Persistence.Enrolments.Queries.GetForStudent;
 using DataPanda.Application.Persistence.EnrolmentWikis.Commands.Create;
@@ -39,6 +40,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
         private readonly IPersistenceQueryHandler<GetEnrolmentForStudentPersistenceQuery, Enrolment> getEnrolmentForStudentPersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetStudentByIdPersistenceQuery, Student> getStudentByIdPersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetAssignmentByIdPersistenceQuery, Assignment> getAssignmentByIdPersistenceQueryHandler;
+        private readonly IPersistenceQueryHandler<GetEnrolmentAssignmentByAssignmentAndEnrolmentIdsPersistenceQuery, EnrolmentAssignment> getEnrolmentAssignmentByAssignmentAndEnrolmentIdsPersistenceQueryHandler;
 
         public ProcessStudentActivityFileCommandHandler(
             IParser<IEnumerable<StudentActivity>> studentActivityParser,
@@ -55,7 +57,8 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler,
             IPersistenceQueryHandler<GetEnrolmentForStudentPersistenceQuery, Enrolment> getEnrolmentForStudentPersistenceQueryHandler,
             IPersistenceQueryHandler<GetStudentByIdPersistenceQuery, Student> getStudentByIdPersistenceQueryHandler,
-            IPersistenceQueryHandler<GetAssignmentByIdPersistenceQuery, Assignment> getAssignmentByIdPersistenceQueryHandler)
+            IPersistenceQueryHandler<GetAssignmentByIdPersistenceQuery, Assignment> getAssignmentByIdPersistenceQueryHandler,
+            IPersistenceQueryHandler<GetEnrolmentAssignmentByAssignmentAndEnrolmentIdsPersistenceQuery, EnrolmentAssignment> getEnrolmentAssignmentByAssignmentAndEnrolmentIdsPersistenceQueryHandler)
         {
             this.studentActivityParser = studentActivityParser;
 
@@ -72,6 +75,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             this.getEnrolmentForStudentPersistenceQueryHandler = getEnrolmentForStudentPersistenceQueryHandler;
             this.getStudentByIdPersistenceQueryHandler = getStudentByIdPersistenceQueryHandler;
             this.getAssignmentByIdPersistenceQueryHandler = getAssignmentByIdPersistenceQueryHandler;
+            this.getEnrolmentAssignmentByAssignmentAndEnrolmentIdsPersistenceQueryHandler = getEnrolmentAssignmentByAssignmentAndEnrolmentIdsPersistenceQueryHandler;
         }
 
         public async Task<Result> Handle(ProcessFileCommand command)
@@ -100,12 +104,10 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
                     var createStudentResult = await CreateStudentIfNotExist(studentId);
                     var createEnrolmentResult = await CreateEnrolmentIfNotExist(course.Id, learningPlatform.Id, studentId, 0);
                     var createAssignmentResult = await CreateAssignmenIfNotExist(assignmentId);
+                    var createEnrolmentAssignmentResult = await CreateEnrolmentAssignmenIfNotExist(assignmentId, createEnrolmentResult.SuccessPayload.Id);
 
 
-                    var enrolmentAssignment = new EnrolmentAssignment(assignmentId, createEnrolmentResult.SuccessPayload.Id);
-                    await createEnrolmentAssignmentPersistenceCommandHandler.Handle(new CreateEnrolmentAssignmentPersistenceCommand(enrolmentAssignment));
-
-                    var fileSubmission = new FileSubmission(fileSubmissionId, enrolmentAssignment.Id, 0);
+                    var fileSubmission = new FileSubmission(fileSubmissionId, createEnrolmentAssignmentResult.SuccessPayload.Id, 0);
                     await createFileSubmissionPersistenceCommandHandler.Handle(new CreateFileSubmissionPersistenceCommand(fileSubmission));
                 }
                 else if (studentActivity.Component == "Wiki" && studentActivity.EventName == "Wiki page updated")
@@ -127,7 +129,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
                 }
             }
 
-            throw new System.NotImplementedException();
+            return Result.Success();
         }
 
         private async Task<Result<Student>> CreateStudentIfNotExist(int studentId)
@@ -179,6 +181,23 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             }
 
             return assignment;
+        }
+
+        private async Task<Result<EnrolmentAssignment>> CreateEnrolmentAssignmenIfNotExist(int assignmentId, int enrolmentId)
+        {
+            var enrolmentAssignment = await getEnrolmentAssignmentByAssignmentAndEnrolmentIdsPersistenceQueryHandler.Handle(new GetEnrolmentAssignmentByAssignmentAndEnrolmentIdsPersistenceQuery(assignmentId, enrolmentId));
+            if (enrolmentAssignment is null)
+            {
+                enrolmentAssignment = new EnrolmentAssignment(assignmentId, enrolmentId);
+                var createEnrolmentAssignmentResult = await createEnrolmentAssignmentPersistenceCommandHandler.Handle(new CreateEnrolmentAssignmentPersistenceCommand(enrolmentAssignment));
+
+                if (!createEnrolmentAssignmentResult.Succeeded)
+                {
+                    return createEnrolmentAssignmentResult.FailurePayload;
+                }
+            }
+
+            return enrolmentAssignment;
         }
     }
 }
