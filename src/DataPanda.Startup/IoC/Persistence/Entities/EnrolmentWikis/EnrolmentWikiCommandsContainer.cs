@@ -2,7 +2,9 @@
 using DataPanda.Application.Contracts.CQRS.Commands;
 using DataPanda.Application.Contracts.CQRS.Results;
 using DataPanda.Application.Persistence.EnrolmentWikis.Commands.Create;
+using DataPanda.Application.Persistence.EnrolmentWikis.Commands.Update;
 using DataPanda.Persistence.Entities.EnrolmentWikis.Commands.Create;
+using DataPanda.Persistence.Entities.EnrolmentWikis.Commands.Update;
 
 namespace DataPanda.Startup.IoC.Persistence.Entities.EnrolmentWikis
 {
@@ -11,6 +13,7 @@ namespace DataPanda.Startup.IoC.Persistence.Entities.EnrolmentWikis
         public static void Register(ContainerBuilder builder)
         {
             RegisterCreate(builder);
+            RegisterUpdate(builder);
         }
 
         private static void RegisterCreate(ContainerBuilder builder)
@@ -18,6 +21,14 @@ namespace DataPanda.Startup.IoC.Persistence.Entities.EnrolmentWikis
             builder
                 .RegisterType<CreateEnrolmentWikiPersistenceCommandHandler>()
                 .As<IPersistenceCommandHandler<CreateEnrolmentWikiPersistenceCommand, Result>>()
+                .InstancePerLifetimeScope();
+        }
+
+        private static void RegisterUpdate(ContainerBuilder builder)
+        {
+            builder
+                .RegisterType<UpdateEnrolmentWikiPersistenceCommandHandler>()
+                .As<IPersistenceCommandHandler<UpdateEnrolmentWikiPersistenceCommand, Result>>()
                 .InstancePerLifetimeScope();
         }
     }

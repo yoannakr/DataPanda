@@ -11,6 +11,7 @@ using DataPanda.Application.Persistence.EnrolmentAssignments.Queries.GetByAssign
 using DataPanda.Application.Persistence.Enrolments.Commands.Create;
 using DataPanda.Application.Persistence.Enrolments.Queries.GetForStudent;
 using DataPanda.Application.Persistence.EnrolmentWikis.Commands.Create;
+using DataPanda.Application.Persistence.EnrolmentWikis.Commands.Update;
 using DataPanda.Application.Persistence.EnrolmentWikis.Queries.GetByWikiAndEnrolmentIds;
 using DataPanda.Application.Persistence.FileSubmissions.Commands.Create;
 using DataPanda.Application.Persistence.FileSubmissions.Queries.GetById;
@@ -38,6 +39,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
         private readonly IPersistenceCommandHandler<CreateFileSubmissionPersistenceCommand, Result> createFileSubmissionPersistenceCommandHandler;
         private readonly IPersistenceCommandHandler<CreateWikiPersistenceCommand, Result> createWikiPersistenceCommandHandler;
         private readonly IPersistenceCommandHandler<CreateEnrolmentWikiPersistenceCommand, Result> createEnrolmentWikiPersistenceCommandHandler;
+        private readonly IPersistenceCommandHandler<UpdateEnrolmentWikiPersistenceCommand, Result> updateEnrolmentWikiPersistenceCommandHandler;
 
         private readonly IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler;
@@ -59,6 +61,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             IPersistenceCommandHandler<CreateFileSubmissionPersistenceCommand, Result> createFileSubmissionPersistenceCommandHandler,
             IPersistenceCommandHandler<CreateWikiPersistenceCommand, Result> createWikiPersistenceCommandHandler,
             IPersistenceCommandHandler<CreateEnrolmentWikiPersistenceCommand, Result> createEnrolmentWikiPersistenceCommandHandler,
+            IPersistenceCommandHandler<UpdateEnrolmentWikiPersistenceCommand, Result> updateEnrolmentWikiPersistenceCommandHandler,
 
             IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler,
             IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler,
@@ -79,6 +82,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             this.createFileSubmissionPersistenceCommandHandler = createFileSubmissionPersistenceCommandHandler;
             this.createWikiPersistenceCommandHandler = createWikiPersistenceCommandHandler;
             this.createEnrolmentWikiPersistenceCommandHandler = createEnrolmentWikiPersistenceCommandHandler;
+            this.updateEnrolmentWikiPersistenceCommandHandler = updateEnrolmentWikiPersistenceCommandHandler;
 
             this.getCourseByNamePersistenceQueryHandler = getCourseByNamePersistenceQueryHandler;
             this.getLearningPlatformByNameAndTypePersistenceQueryHandler = getLearningPlatformByNameAndTypePersistenceQueryHandler;
@@ -104,7 +108,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
 
             foreach (var studentActivity in studentActivityParsingResult.SuccessPayload.Reverse())
             {
-                if (studentActivity.Component == "File submissions" &&
+                if (false && studentActivity.Component == "File submissions" &&
                     studentActivity.EventContext == "Assignment: Качване на курсови задачи и проекти" &&
                     studentActivity.EventName == "A file has been uploaded.")
                 {
@@ -131,7 +135,11 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
                     var createStudentResult = await CreateStudentIfNotExist(studentId);
                     var createEnrolmentResult = await CreateEnrolmentIfNotExist(course.Id, learningPlatform.Id, studentId, 0);
                     var createWikiResult = await CreateWikiIfNotExist(wikiId, wikiName);
-                    var enrolmentWiki = await CreateEnrolmentWikiIfNotExist(createWikiResult.SuccessPayload.Id, createEnrolmentResult.SuccessPayload.Id);
+                    var createEnrolmentWikiResult = await CreateEnrolmentWikiIfNotExist(createWikiResult.SuccessPayload.Id, createEnrolmentResult.SuccessPayload.Id);
+
+                    var enrolmentWiki = createEnrolmentWikiResult.SuccessPayload;
+                    enrolmentWiki.NumberOfEdits += 1;
+                    await updateEnrolmentWikiPersistenceCommandHandler.Handle(new UpdateEnrolmentWikiPersistenceCommand(enrolmentWiki));
                 }
             }
 
