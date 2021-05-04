@@ -29,6 +29,7 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
         private static void RegisterAssignmentCqrs(ContainerBuilder builder)
         {
             AssignmentCommandsContainer.Register(builder);
+            AssignmentQueryContainer.Register(builder);
         }
 
         private static void RegisterCourseCqrs(ContainerBuilder builder)
