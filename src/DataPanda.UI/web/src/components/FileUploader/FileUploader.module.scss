@@ -1,0 +1,29 @@
+.Button button {
+  border: 2px solid #555555;
+  border-radius: 5px;
+  background-color: #555555;
+  color: white;
+  font-weight: bold;
+  font-size: 17px;
+  padding: 8px;
+  width: 100px;
+  margin-right: 15px;
+}
+
+.Button button:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.Previous {
+  position: fixed;
+  bottom: 30%;
+  left: 20%;
+}
+
+.Next {
+  position: fixed;
+  bottom: 30%;
+  right: 20%;
+}
