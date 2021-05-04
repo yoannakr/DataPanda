@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataPanda.Persistence.Configurations
 {
-    public class FileSubmissionConfiguration : IEntityTypeConfiguration<FileSubmission>
+    public class WikiConfiguration : IEntityTypeConfiguration<Wiki>
     {
-        public void Configure(EntityTypeBuilder<FileSubmission> builder)
+        public void Configure(EntityTypeBuilder<Wiki> builder)
         {
             builder
-                .Property(fileSubmission => fileSubmission.Id)
+                .Property(wiki => wiki.Id)
                 .ValueGeneratedNever();
         }
     }
