@@ -49,6 +49,8 @@
         "required": {
           "some": ["nesting", "id"]
         }
-      }]
+      }],
+	  "max-len": 0,
+	  "react/jsx-props-no-spreading": "off"
   }
 }
