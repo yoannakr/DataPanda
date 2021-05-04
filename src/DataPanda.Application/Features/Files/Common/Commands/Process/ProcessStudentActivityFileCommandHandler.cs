@@ -14,6 +14,7 @@ using DataPanda.Application.Persistence.EnrolmentWikis.Commands.Create;
 using DataPanda.Application.Persistence.EnrolmentWikis.Commands.Update;
 using DataPanda.Application.Persistence.EnrolmentWikis.Queries.GetByWikiAndEnrolmentIds;
 using DataPanda.Application.Persistence.FileSubmissions.Commands.Create;
+using DataPanda.Application.Persistence.FileSubmissions.Commands.Update;
 using DataPanda.Application.Persistence.FileSubmissions.Queries.GetById;
 using DataPanda.Application.Persistence.LearningPlatforms.Queries.GetByNameAndType;
 using DataPanda.Application.Persistence.Students.Commands.Create;
@@ -40,6 +41,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
         private readonly IPersistenceCommandHandler<CreateWikiPersistenceCommand, Result> createWikiPersistenceCommandHandler;
         private readonly IPersistenceCommandHandler<CreateEnrolmentWikiPersistenceCommand, Result> createEnrolmentWikiPersistenceCommandHandler;
         private readonly IPersistenceCommandHandler<UpdateEnrolmentWikiPersistenceCommand, Result> updateEnrolmentWikiPersistenceCommandHandler;
+        private readonly IPersistenceCommandHandler<UpdateFileSubmissionPersistenceCommand, Result> updateFileSubmissionPersistenceCommandHandler;
 
         private readonly IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler;
@@ -62,6 +64,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             IPersistenceCommandHandler<CreateWikiPersistenceCommand, Result> createWikiPersistenceCommandHandler,
             IPersistenceCommandHandler<CreateEnrolmentWikiPersistenceCommand, Result> createEnrolmentWikiPersistenceCommandHandler,
             IPersistenceCommandHandler<UpdateEnrolmentWikiPersistenceCommand, Result> updateEnrolmentWikiPersistenceCommandHandler,
+            IPersistenceCommandHandler<UpdateFileSubmissionPersistenceCommand, Result> updateFileSubmissionPersistenceCommandHandler,
 
             IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler,
             IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler,
@@ -83,6 +86,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             this.createWikiPersistenceCommandHandler = createWikiPersistenceCommandHandler;
             this.createEnrolmentWikiPersistenceCommandHandler = createEnrolmentWikiPersistenceCommandHandler;
             this.updateEnrolmentWikiPersistenceCommandHandler = updateEnrolmentWikiPersistenceCommandHandler;
+            this.updateFileSubmissionPersistenceCommandHandler = updateFileSubmissionPersistenceCommandHandler;
 
             this.getCourseByNamePersistenceQueryHandler = getCourseByNamePersistenceQueryHandler;
             this.getLearningPlatformByNameAndTypePersistenceQueryHandler = getLearningPlatformByNameAndTypePersistenceQueryHandler;
@@ -106,9 +110,12 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             var course = await getCourseByNamePersistenceQueryHandler.Handle(new GetCourseByNamePersistenceQuery(command.CourseName));
             var learningPlatform = await getLearningPlatformByNameAndTypePersistenceQueryHandler.Handle(new GetLearningPlatformByNameAndTypePersistenceQuery(command.LearningPlatformName, command.LearningPlatformType));
 
-            foreach (var studentActivity in studentActivityParsingResult.SuccessPayload.Reverse())
+            var studetnActivities = studentActivityParsingResult.SuccessPayload.ToList();
+            for (var i = 0; i < studetnActivities.Count; i++)
             {
-                if (false && studentActivity.Component == "File submissions" &&
+                var studentActivity = studetnActivities[i];
+
+                if (studentActivity.Component == "File submissions" &&
                     studentActivity.EventContext == "Assignment: Качване на курсови задачи и проекти" &&
                     studentActivity.EventName == "A file has been uploaded.")
                 {
@@ -122,7 +129,15 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
                     var createEnrolmentResult = await CreateEnrolmentIfNotExist(course.Id, learningPlatform.Id, studentId, 0);
                     var createAssignmentResult = await CreateAssignmenIfNotExist(assignmentId);
                     var createEnrolmentAssignmentResult = await CreateEnrolmentAssignmenIfNotExist(assignmentId, createEnrolmentResult.SuccessPayload.Id);
-                    var createFileSubmissionResult = CreateFileSubmissionIfNotExist(fileSubmissionId, createEnrolmentAssignmentResult.SuccessPayload.Id);
+                    var createFileSubmissionResult = await CreateFileSubmissionIfNotExist(fileSubmissionId, createEnrolmentAssignmentResult.SuccessPayload.Id);
+
+                    var previousStudentActivity = studetnActivities[i - 1];
+                    var previousMatches = Regex.Matches(previousStudentActivity.Description, @"(?<=')\d+(?=')");
+                    var numberOfFilesUploaded = int.Parse(previousMatches[1].Value);
+
+                    var fileSubmission = createFileSubmissionResult.SuccessPayload;
+                    fileSubmission.NumberOfFiles += numberOfFilesUploaded;
+                    await updateFileSubmissionPersistenceCommandHandler.Handle(new UpdateFileSubmissionPersistenceCommand(fileSubmission));
                 }
                 else if (studentActivity.Component == "Wiki" && studentActivity.EventName == "Wiki page updated")
                 {
