@@ -1,4 +1,8 @@
-using DataPanda.Persistence;
+using Autofac;
+using DataPanda.Startup.IoC.Api;
+using DataPanda.Startup.IoC.Application;
+using DataPanda.Startup.IoC.Infrastructure;
+using DataPanda.Startup.IoC.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,15 +22,20 @@ namespace DataPanda.Startup
 
         public void ConfigureServices(IServiceCollection services)
             => services
+                .AddApi()
                 .AddPersistence(Configuration);
+
+        public void ConfigureContainer(ContainerBuilder builder)
+            => builder
+                .RegisterApplication()
+                .RegisterPersistence()
+                .RegisterInfrastructure();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DataPanda.Startup v1"));
             }
 
             app.UseHttpsRedirection();

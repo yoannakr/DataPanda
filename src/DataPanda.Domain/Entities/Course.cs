@@ -4,6 +4,12 @@ namespace DataPanda.Domain.Entities
 {
     public class Course
     {
+        public Course(string name, string fieldOfApplication)
+        {
+            Name = name;
+            FieldOfApplication = fieldOfApplication;
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }

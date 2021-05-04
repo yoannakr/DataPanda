@@ -12,10 +12,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataPanda.Application\DataPanda.Application.csproj" />
     <ProjectReference Include="..\DataPanda.Domain\DataPanda.Domain.csproj" />
   </ItemGroup>
 

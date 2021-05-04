@@ -5,4 +5,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataPanda.Domain\DataPanda.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
