@@ -58,6 +58,7 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
         private static void RegisterFileSubmissonCqrs(ContainerBuilder builder)
         {
             FileSubmissonCommandsContainer.Register(builder);
+            FileSubmissonQueriesContainer.Register(builder);
         }
 
         private static void RegisterLearningPlatformCqrs(ContainerBuilder builder)
@@ -75,6 +76,7 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
         private static void RegisterWikiCqrs(ContainerBuilder builder)
         {
             WikiCommandsContainer.Register(builder);
+            WikiQueriesContainer.Register(builder);
         }
     }
 }
