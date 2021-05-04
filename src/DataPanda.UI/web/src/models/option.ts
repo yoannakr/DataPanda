@@ -31,7 +31,7 @@ export const fileOptions: IOption[] = [{
 },
 {
 	id: 2,
-	name: "Качване на много файлове"
+	name: "Качване на няколко файла"
 },
 {
 	id: 3,
