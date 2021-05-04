@@ -12,6 +12,7 @@ using DataPanda.Application.Persistence.FileSubmissions.Commands.Create;
 using DataPanda.Application.Persistence.LearningPlatforms.Queries.GetByNameAndType;
 using DataPanda.Application.Persistence.Students.Commands.Create;
 using DataPanda.Application.Persistence.Students.Queries.GetById;
+using DataPanda.Application.Persistence.Wikis.Commands.Create;
 using DataPanda.Domain.Entities;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -28,6 +29,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
         private readonly IPersistenceCommandHandler<CreateAssignmentPersistenceCommand, Result> createAssignmentPersistenceCommandHandler;
         private readonly IPersistenceCommandHandler<CreateEnrolmentAssignmentPersistenceCommand, Result> createEnrolmentAssignmentPersistenceCommandHandler;
         private readonly IPersistenceCommandHandler<CreateFileSubmissionPersistenceCommand, Result> createFileSubmissionPersistenceCommandHandler;
+        private readonly IPersistenceCommandHandler<CreateWikiPersistenceCommand, Result> createWikiPersistenceCommandHandler;
 
         private readonly IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler;
         private readonly IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler;
@@ -42,6 +44,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             IPersistenceCommandHandler<CreateAssignmentPersistenceCommand, Result> createAssignmentPersistenceCommandHandler,
             IPersistenceCommandHandler<CreateEnrolmentAssignmentPersistenceCommand, Result> createEnrolmentAssignmentPersistenceCommandHandler,
             IPersistenceCommandHandler<CreateFileSubmissionPersistenceCommand, Result> createFileSubmissionPersistenceCommandHandler,
+            IPersistenceCommandHandler<CreateWikiPersistenceCommand, Result> createWikiPersistenceCommandHandler,
 
             IPersistenceQueryHandler<GetCourseByNamePersistenceQuery, Course> getCourseByNamePersistenceQueryHandler,
             IPersistenceQueryHandler<GetLearningPlatformByNameAndTypePersistenceQuery, LearningPlatform> getLearningPlatformByNameAndTypePersistenceQueryHandler,
@@ -55,6 +58,7 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
             this.createAssignmentPersistenceCommandHandler = createAssignmentPersistenceCommandHandler;
             this.createEnrolmentAssignmentPersistenceCommandHandler = createEnrolmentAssignmentPersistenceCommandHandler;
             this.createFileSubmissionPersistenceCommandHandler = createFileSubmissionPersistenceCommandHandler;
+            this.createWikiPersistenceCommandHandler = createWikiPersistenceCommandHandler;
 
             this.getCourseByNamePersistenceQueryHandler = getCourseByNamePersistenceQueryHandler;
             this.getLearningPlatformByNameAndTypePersistenceQueryHandler = getLearningPlatformByNameAndTypePersistenceQueryHandler;
@@ -99,7 +103,17 @@ namespace DataPanda.Application.Features.Files.Common.Commands.Process
                 }
                 else if (studentActivity.Component == "Wiki" && studentActivity.EventName == "Wiki page updated")
                 {
+                    var matches = Regex.Matches(studentActivity.Description, @"(?<=')\d+(?=')");
 
+                    var studentId = int.Parse(matches[0].Value);
+                    var wikiId = int.Parse(matches[1].Value);
+                    var wikiName = studentActivity.EventContext.Substring(6);
+
+                    var createStudentResult = await CreateStudentIfNotExist(studentId);
+                    var createEnrolmentResult = await CreateEnrolmentIfNotExist(course.Id, learningPlatform.Id, studentId, 0);
+
+                    var wiki = new Wiki(wikiId, wikiName);
+                    await createWikiPersistenceCommandHandler.Handle(new CreateWikiPersistenceCommand(wiki));
                 }
             }
 

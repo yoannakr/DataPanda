@@ -6,6 +6,7 @@ using DataPanda.Startup.IoC.Persistence.Entities.Enrolments;
 using DataPanda.Startup.IoC.Persistence.Entities.FileSubmissions;
 using DataPanda.Startup.IoC.Persistence.Entities.LearningPlatforms;
 using DataPanda.Startup.IoC.Persistence.Entities.Students;
+using DataPanda.Startup.IoC.Persistence.Entities.Wikis;
 
 namespace DataPanda.Startup.IoC.Persistence.Entities
 {
@@ -20,6 +21,7 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
             RegisterFileSubmissonCqrs(builder);
             RegisterLearningPlatformCqrs(builder);
             RegisterStudentCqrs(builder);
+            RegisterWikiCqrs(builder);
         }
 
         private static void RegisterAssignmentCqrs(ContainerBuilder builder)
@@ -59,6 +61,11 @@ namespace DataPanda.Startup.IoC.Persistence.Entities
         {
             StudentCommandsContainer.Register(builder);
             StudentsQueriesContainer.Register(builder);
+        }
+
+        private static void RegisterWikiCqrs(ContainerBuilder builder)
+        {
+            WikiCommandsContainer.Register(builder);
         }
     }
 }
