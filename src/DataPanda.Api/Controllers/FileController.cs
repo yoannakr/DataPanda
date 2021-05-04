@@ -3,9 +3,11 @@ using DataPanda.Api.InputModels.File;
 using DataPanda.Application.Contracts.CQRS.Commands;
 using DataPanda.Application.Contracts.CQRS.Results;
 using DataPanda.Application.Features.Files.Commands.Upload;
+using DataPanda.Application.Features.Files.Commands.UploadMultiple;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace DataPanda.Api.Controllers
@@ -13,10 +15,14 @@ namespace DataPanda.Api.Controllers
     public class FileController : ApiController
     {
         private readonly ICommandHandler<UploadFileCommand, Result> uploadFileCommandHandler;
+        private readonly ICommandHandler<UploadMultipleFilesCommand, Result> uploadMultipleFilesCommandHandler;
 
-        public FileController(ICommandHandler<UploadFileCommand, Result> uploadFileCommandHandler)
+        public FileController(
+            ICommandHandler<UploadFileCommand, Result> uploadFileCommandHandler,
+            ICommandHandler<UploadMultipleFilesCommand, Result> uploadMultipleFilesCommandHandler)
         {
             this.uploadFileCommandHandler = uploadFileCommandHandler;
+            this.uploadMultipleFilesCommandHandler = uploadMultipleFilesCommandHandler;
         }
 
         [HttpPost]
@@ -37,9 +43,31 @@ namespace DataPanda.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> UploadMultiple(IEnumerable<IFormFile> formFiles)
+        public async Task<ActionResult> UploadMultiple([FromForm] UploadMultipleInputModel inputModel)
         {
-            return new OkResult();
+            var fileStreams = new List<Stream>();
+            foreach (var formFiles in inputModel.FormFiles)
+            {
+                var stream = formFiles.OpenReadStream();
+                fileStreams.Add(stream);
+            }
+
+            var command = new UploadMultipleFilesCommand(
+                inputModel.PlatformName,
+                inputModel.PlatformType,
+                inputModel.PlatformUrl,
+                inputModel.CourseName,
+                inputModel.CourseFieldOfApplication,
+                fileStreams);
+
+            var result = await uploadMultipleFilesCommandHandler.Handle(command);
+
+            foreach (var fileStream in fileStreams)
+            {
+                await fileStream.DisposeAsync();
+            }
+
+            return result.ToActionResult();
         }
 
         [HttpPost]

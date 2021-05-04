@@ -2,6 +2,7 @@
 using DataPanda.Application.Contracts.CQRS.Commands;
 using DataPanda.Application.Contracts.CQRS.Results;
 using DataPanda.Application.Features.Files.Commands.Upload;
+using DataPanda.Application.Features.Files.Commands.UploadMultiple;
 using DataPanda.Application.Features.Files.Common.Commands.Decorators;
 using DataPanda.Application.Features.Files.Common.Commands.Process;
 
@@ -12,6 +13,7 @@ namespace DataPanda.Startup.IoC.Application.Features.Files
         public static void Register(ContainerBuilder builder)
         {
             RegisterUpload(builder);
+            RegisterUploadMultiple(builder);
             RegisterCommonProcess(builder);
         }
 
@@ -27,6 +29,20 @@ namespace DataPanda.Startup.IoC.Application.Features.Files
 
             builder
                 .RegisterDecorator<EnsureCourseExistsCommandDecorator<UploadFileCommand>, ICommandHandler<UploadFileCommand, Result>>();
+        }
+
+        private static void RegisterUploadMultiple(ContainerBuilder builder)
+        {
+            builder
+                .RegisterType<UploadMultipleFilesCommandHandler>()
+                .As<ICommandHandler<UploadMultipleFilesCommand, Result>>()
+                .InstancePerLifetimeScope();
+
+            builder
+               .RegisterDecorator<EnsureLearningPlatformExistsCommandDecorator<UploadMultipleFilesCommand>, ICommandHandler<UploadMultipleFilesCommand, Result>>();
+
+            builder
+                .RegisterDecorator<EnsureCourseExistsCommandDecorator<UploadMultipleFilesCommand>, ICommandHandler<UploadMultipleFilesCommand, Result>>();
         }
 
         private static void RegisterCommonProcess(ContainerBuilder builder)
