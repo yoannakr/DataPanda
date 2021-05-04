@@ -1,0 +1,20 @@
+.InputFile {
+  padding-top: 150px;
+  margin-left: 35%;
+}
+
+.InputFile [type="file"] {
+  display: none;
+}
+
+.InputFile [type="file"] + label {
+  display: inline-block;
+  cursor: pointer;
+  border: 2px solid #555555;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  font-size: 17px;
+  padding: 8px;
+}

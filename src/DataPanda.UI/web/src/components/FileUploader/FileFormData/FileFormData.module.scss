@@ -1,0 +1,35 @@
+.Form {
+  position: relative;
+  top: 150px;
+  margin-left: 20%;
+}
+
+.Row {
+  display: flex;
+  font-size: 8px;
+  vertical-align: text-bottom;
+}
+
+.Column {
+  display: flex;
+  width: 20%;
+  flex-direction: column;
+  padding: 5px 13px 5px 5px;
+  margin: 5px 5px 5px 5px;
+  font-size: 16px;
+  vertical-align: bottom;
+}
+
+.Form input[type="text"],
+select {
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+@media only screen and (max-width: 1200px) {
+  .Column {
+    font-size: 12px;
+  }
+}

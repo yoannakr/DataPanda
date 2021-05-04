@@ -1,15 +1,16 @@
 import React from "react";
-import { IMenuOption } from "models/menuOption";
+import { IOption } from "models/option";
 import styles from "./Menu.module.scss";
+import Button from "../common/Button/Button";
 
 interface IProps {
-	menuOptions: IMenuOption[];
+	menuOptions: IOption[];
 }
 
-const Menu : React.FC<IProps> = ({ menuOptions }) => (
+const Menu: React.FC<IProps> = ({ menuOptions }) => (
 	<div className={styles.Menu}>
 		{menuOptions.map(option => (
-			<button type="button" className={styles.Button} key={option.id}>{option.name}</button>
+			<Button key={option.id} content={option.name} />
 		))}
 	</div>
 );

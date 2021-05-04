@@ -1,9 +1,9 @@
-export interface IMenuOption {
+export interface IOption {
 	id: number;
 	name: string;
 }
 
-export const menuOptions: IMenuOption[] = [{
+export const menuOptions: IOption[] = [{
 	id: 1,
 	name: "Четене и обобщаване на данните от файлове с дейности и оценки"
 },
@@ -22,5 +22,19 @@ export const menuOptions: IMenuOption[] = [{
 {
 	id: 5,
 	name: "Корелационен анализ на брой редактирани Wiki"
+}
+];
+
+export const fileOptions: IOption[] = [{
+	id: 1,
+	name: "Качване на един файл"
+},
+{
+	id: 2,
+	name: "Качване на няколко файла"
+},
+{
+	id: 3,
+	name: "Качване на архив от файлове"
 }
 ];
