@@ -30,10 +30,10 @@ const FileSelection: React.FC<IProps> = ({ enrolment, updateEnrolment, selectedO
 	}
 
 	const selectFile = (event: ChangeEvent<HTMLInputElement>) => {
-		const eventFiles = event.currentTarget.files != null ? event.currentTarget.files : [];
+		const eventFiles = event.target.files != null ? event.target.files : [];
 		const newFiles: IFile[] = [];
 		for (let i = 0; i < eventFiles.length; i += 1) {
-			const newFile = { id: i, name: eventFiles[i].name, content: eventFiles[i].stream };
+			const newFile = { id: i, name: eventFiles[i].name, content: eventFiles[i] };
 			newFiles.push(newFile);
 		}
 		setNewEnrolment({ ...newEnrolment, files: newFiles });

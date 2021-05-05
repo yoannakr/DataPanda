@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { fileOptions, IOption } from "models/option";
 import { platformTypes } from "models/platformType";
 import { fieldOfApplications } from "models/fieldOfApplication";
@@ -45,6 +46,23 @@ const FileUploader = () => {
 		setEnrolment(newEnrolment);
 	};
 
+	const uploadEnrolment = () => {
+		if (selectedOption?.id === 1) {
+			const fileContent = enrolment?.files !== undefined ? enrolment?.files[0].content : "";
+			console.log(fileContent);
+			axios.post("https://localhost:44364/api/file/Upload",
+				{
+					PlatformName: enrolment?.nameOfPlatform,
+					PlatformType: enrolment?.typeOfPlatform?.name,
+					PlatformUrl: enrolment?.url,
+					CourseName: enrolment?.nameOfCourse,
+					CourseFieldOfApplication: enrolment?.fieldOfApplication?.name,
+					FormFile: fileContent
+				}).then(() => { setCurrentStep(1); })
+				.catch(err => { console.log(err); });
+		}
+	};
+
 	switch (currentStep) {
 		case 1:
 			result.push(
@@ -76,7 +94,9 @@ const FileUploader = () => {
 	result.push(
 		<div className={styles.Button} key={countOfSteps + 1}>
 			{currentStep > 1 ? <button type="button" onClick={decrementStep} className={styles.Previous}>Назад</button> : ""}
-			{currentStep <= countOfSteps - 1 ? <button type="button" onClick={incrementStep} className={styles.Next}>Напред</button> : ""}
+			{currentStep <= countOfSteps - 1
+				? <button type="button" onClick={incrementStep} className={styles.Next}>Напред</button>
+				: <button type="button" onClick={uploadEnrolment} className={styles.Next}>Завърши</button>}
 		</div>
 	);
 
