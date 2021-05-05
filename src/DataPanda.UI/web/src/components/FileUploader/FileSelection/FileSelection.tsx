@@ -1,18 +1,22 @@
+import React, { ChangeEvent, useState, useEffect } from "react";
+import { IEnrolment } from "models/enrolment";
 import { IOption } from "models/option";
-import React, { ChangeEvent, useState } from "react";
+import { IFile } from "../../../models/file";
 import styles from "./FileSelection.module.scss";
 
-interface IFile {
-	id: number;
-	name: string;
-}
-
 interface IProps {
+	enrolment: IEnrolment | undefined;
+	updateEnrolment: any;
 	selectedOption: IOption | undefined;
 }
-const FileSelection: React.FC<IProps> = ({ selectedOption }) => {
-	const [selectedFiles, setSelectedFiles] = useState<IFile[]>([]);
+
+const FileSelection: React.FC<IProps> = ({ enrolment, updateEnrolment, selectedOption }) => {
+	const [newEnrolment, setNewEnrolment] = useState(enrolment);
 	const fileProps = { accept: "", multiple: false };
+
+	useEffect(() => {
+		updateEnrolment(newEnrolment);
+	}, [newEnrolment]);
 
 	if (selectedOption?.id === 1) {
 		fileProps.accept = ".xls,.xlsx";
@@ -27,16 +31,16 @@ const FileSelection: React.FC<IProps> = ({ selectedOption }) => {
 
 	const selectFile = (event: ChangeEvent<HTMLInputElement>) => {
 		const eventFiles = event.currentTarget.files != null ? event.currentTarget.files : [];
-		const files: IFile[] = [];
+		const newFiles: IFile[] = [];
 		for (let i = 0; i < eventFiles.length; i += 1) {
-			const newFile = { id: selectedFiles.length + 1, name: eventFiles[i].name };
-			files.push(newFile);
+			const newFile = { id: i, name: eventFiles[i].name, content: eventFiles[i].stream };
+			newFiles.push(newFile);
 		}
-		setSelectedFiles(files);
+		setNewEnrolment({ ...newEnrolment, files: newFiles });
 	};
 
 	const clearFiles = () => {
-		setSelectedFiles([]);
+		setNewEnrolment({ ...newEnrolment, files: [] });
 	};
 
 	return (
@@ -44,7 +48,7 @@ const FileSelection: React.FC<IProps> = ({ selectedOption }) => {
 			<input type="file" id="file" onChange={selectFile} onClick={clearFiles} {...fileProps} />
 			<label htmlFor="file">Избиране на файл</label>
 			<h4>Избраните файлове:</h4>
-			{selectedFiles.map(file => (
+			{newEnrolment?.files?.map(file => (
 				<p key={file.id}>{file.name}</p>
 			))}
 		</div>

@@ -66,7 +66,7 @@ const FileUploader = () => {
 			result.push(
 				<div key={currentStep}>
 					<StepProgressBar countOfSteps={countOfSteps} currentStep={3} />
-					<FileSelection selectedOption={selectedOption} />
+					<FileSelection enrolment={enrolment} updateEnrolment={updateEnrolment} selectedOption={selectedOption} />
 				</div>
 			);
 			break;
