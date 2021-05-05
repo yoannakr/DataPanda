@@ -5,7 +5,7 @@ import { IFile } from "../../../models/file";
 import styles from "./FileSelection.module.scss";
 
 interface IProps {
-	enrolment: IEnrolment | undefined;
+	enrolment: IEnrolment;
 	updateEnrolment: any;
 	selectedOption: IOption | undefined;
 }

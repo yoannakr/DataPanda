@@ -5,7 +5,7 @@ import { IPlatformType, platformTypes } from "../../../models/platformType";
 import { fieldOfApplications, IFieldOfApplication } from "../../../models/fieldOfApplication";
 
 interface IProps {
-	enrolment: IEnrolment | undefined;
+	enrolment: IEnrolment;
 	updateEnrolment: any;
 }
 
@@ -22,12 +22,20 @@ const FormData: React.FC<IProps> = ({ enrolment, updateEnrolment }) => {
 
 	const onPlatformTypeChange = (id: number) => {
 		const platformType: IPlatformType | undefined = platformTypes.find(p => p.id === id);
-		setNewEnrolment({ ...newEnrolment, typeOfPlatform: platformType });
+		if (platformType === undefined) {
+			setNewEnrolment({ ...newEnrolment, typeOfPlatform: platformTypes[0] });
+		} else {
+			setNewEnrolment({ ...newEnrolment, typeOfPlatform: platformType });
+		}
 	};
 
 	const onFieldOfApplicationChange = (id: number) => {
 		const fieldApp: IFieldOfApplication | undefined = fieldOfApplications.find(p => p.id === id);
-		setNewEnrolment({ ...newEnrolment, fieldOfApplication: fieldApp });
+		if (fieldApp === undefined) {
+			setNewEnrolment({ ...newEnrolment, typeOfPlatform: fieldOfApplications[0] });
+		} else {
+			setNewEnrolment({ ...newEnrolment, typeOfPlatform: fieldApp });
+		}
 	};
 
 	const onURLChange = (urlInput: string) => {

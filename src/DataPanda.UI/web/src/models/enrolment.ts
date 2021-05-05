@@ -3,10 +3,10 @@ import {IFieldOfApplication} from "./fieldOfApplication";
 import {IFile} from "./file";
 
 export interface IEnrolment {
-	nameOfPlatform?: string;
-	typeOfPlatform?: IPlatformType;
-	url?: string;
-	nameOfCourse?: string;
-	fieldOfApplication?: IFieldOfApplication;
-	files?: IFile[];
+	nameOfPlatform: string;
+	typeOfPlatform: IPlatformType;
+	url: string;
+	nameOfCourse: string;
+	fieldOfApplication: IFieldOfApplication;
+	files: IFile[];
 }
