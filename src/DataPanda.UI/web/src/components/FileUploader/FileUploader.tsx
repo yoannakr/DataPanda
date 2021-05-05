@@ -3,6 +3,7 @@ import axios from "axios";
 import { fileOptions, IOption } from "models/option";
 import { platformTypes } from "models/platformType";
 import { fieldOfApplications } from "models/fieldOfApplication";
+import { useHistory } from "react-router-dom";
 import { IEnrolment } from "../../models/enrolment";
 import styles from "./FileUploader.module.scss";
 import StepProgressBar from "./StepProgressBar/StepProgressBar";
@@ -24,6 +25,7 @@ const FileUploader = () => {
 	const [enrolment, setEnrolment] = useState<IEnrolment>(defaultEnrolment);
 	const result = [];
 	const countOfSteps = 3;
+	const history = useHistory();
 
 	if (enrolment === undefined) {
 		setEnrolment(defaultEnrolment);
@@ -54,6 +56,13 @@ const FileUploader = () => {
 	};
 
 	const uploadEnrolment = () => {
+		if (enrolment.nameOfPlatform === "" || enrolment.typeOfPlatform.name === ""
+			|| enrolment.url === "" || enrolment.nameOfCourse === "" || enrolment.fieldOfApplication.name === ""
+			|| enrolment.files.length === 0) {
+			alert("Попълнете данните!");
+			return;
+		}
+
 		if (selectedOption?.id === 1) {
 			const paramsInput = new FormData();
 			paramsInput.append("PlatformName", enrolment.nameOfPlatform);
@@ -63,8 +72,7 @@ const FileUploader = () => {
 			paramsInput.append("CourseFieldOfApplication", enrolment.fieldOfApplication.name);
 			paramsInput.append("FormFile", enrolment.files[0].content);
 
-			axios.post("https://localhost:44364/api/file/Upload", paramsInput)
-				.catch(err => { console.log(err); });
+			axios.post("https://localhost:44364/api/file/Upload", paramsInput);
 		} else if (selectedOption?.id === 2) {
 			const paramsInput = new FormData();
 			paramsInput.append("PlatformName", enrolment.nameOfPlatform);
@@ -74,8 +82,7 @@ const FileUploader = () => {
 			paramsInput.append("CourseFieldOfApplication", enrolment.fieldOfApplication.name);
 			enrolment.files.map(file => paramsInput.append("FormFiles", file.content));
 
-			axios.post("https://localhost:44364/api/file/UploadMultiple", paramsInput)
-				.catch(err => { console.log(err); });
+			axios.post("https://localhost:44364/api/file/UploadMultiple", paramsInput);
 		} else if (selectedOption?.id === 3) {
 			const paramsInput = new FormData();
 			paramsInput.append("PlatformName", enrolment.nameOfPlatform);
@@ -85,9 +92,10 @@ const FileUploader = () => {
 			paramsInput.append("CourseFieldOfApplication", enrolment.fieldOfApplication.name);
 			paramsInput.append("FormFile", enrolment.files[0].content);
 
-			axios.post("https://localhost:44364/api/file/UploadArchive", paramsInput)
-				.catch(err => { console.log(err); });
+			axios.post("https://localhost:44364/api/file/UploadArchive", paramsInput);
 		}
+
+		history.push("/");
 	};
 
 	switch (currentStep) {
