@@ -15,6 +15,6 @@
 
         public int NumberOfFiles { get; set; }
 
-        public EnrolmentAssignment EnrolmentAssignments { get; set; }
+        public EnrolmentAssignment EnrolmentAssignment { get; set; }
     }
 }

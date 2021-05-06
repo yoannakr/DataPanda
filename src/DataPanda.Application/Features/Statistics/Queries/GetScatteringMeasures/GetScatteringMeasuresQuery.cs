@@ -5,5 +5,14 @@ namespace DataPanda.Application.Features.Statistics.Queries.GetScatteringMeasure
 {
     public class GetScatteringMeasuresQuery : IQuery<ScatteringMeasuresOutputModel>
     {
+        public GetScatteringMeasuresQuery(string courseName, string platformName)
+        {
+            CourseName = courseName;
+            PlatformName = platformName;
+        }
+
+        public string CourseName { get; }
+
+        public string PlatformName { get; }
     }
 }

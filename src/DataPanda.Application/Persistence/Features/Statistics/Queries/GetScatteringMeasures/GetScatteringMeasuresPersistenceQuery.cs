@@ -5,5 +5,14 @@ namespace DataPanda.Application.Persistence.Features.Statistics.Queries.GetScatt
 {
     public class GetScatteringMeasuresPersistenceQuery : IPersistenceQuery<ScatteringMeasuresOutputModel>
     {
+        public GetScatteringMeasuresPersistenceQuery(string courseName, string platformName)
+        {
+            CourseName = courseName;
+            PlatformName = platformName;
+        }
+
+        public string CourseName { get; }
+
+        public string PlatformName { get; }
     }
 }

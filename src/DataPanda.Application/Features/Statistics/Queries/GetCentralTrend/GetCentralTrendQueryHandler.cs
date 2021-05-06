@@ -15,6 +15,6 @@ namespace DataPanda.Application.Features.Statistics.Queries.GetCentralTrend
         }
 
         public async Task<CentralTrendOutputModel> Handle(GetCentralTrendQuery query)
-            => await getCentralTrendPersistenceQueryHandler.Handle(new GetCentralTrendPersistenceQuery());
+            => await getCentralTrendPersistenceQueryHandler.Handle(new GetCentralTrendPersistenceQuery(query.CourseName, query.PlatformName));
     }
 }

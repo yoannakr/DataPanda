@@ -5,5 +5,14 @@ namespace DataPanda.Application.Features.Statistics.Queries.GetFrequencyDistribu
 {
     public class GetFrequencyDistributionQuery : IQuery<FrequencyDistributionOutputModel>
     {
+        public GetFrequencyDistributionQuery(string courseName, string platformName)
+        {
+            CourseName = courseName;
+            PlatformName = platformName;
+        }
+
+        public string CourseName { get; }
+
+        public string PlatformName { get; }
     }
 }
