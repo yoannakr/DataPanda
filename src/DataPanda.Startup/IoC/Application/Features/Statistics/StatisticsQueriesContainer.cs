@@ -4,6 +4,8 @@ using DataPanda.Application.Features.Statistics.Queries.GetCentralTrend;
 using DataPanda.Application.Features.Statistics.Queries.GetCentralTrend.Models;
 using DataPanda.Application.Features.Statistics.Queries.GetFrequencyDistribution;
 using DataPanda.Application.Features.Statistics.Queries.GetFrequencyDistribution.Models;
+using DataPanda.Application.Features.Statistics.Queries.GetScatteringMeasures;
+using DataPanda.Application.Features.Statistics.Queries.GetScatteringMeasures.Models;
 
 namespace DataPanda.Startup.IoC.Application.Features.Statistics
 {
@@ -13,6 +15,7 @@ namespace DataPanda.Startup.IoC.Application.Features.Statistics
         {
             RegisterGetFrequencyDistribution(builder);
             RegisterGetCentralTrend(builder);
+            RegisterGetScatteringMeasures(builder);
         }
 
         private static void RegisterGetFrequencyDistribution(ContainerBuilder builder)
@@ -28,6 +31,14 @@ namespace DataPanda.Startup.IoC.Application.Features.Statistics
             builder
                 .RegisterType<GetCentralTrendQueryHandler>()
                 .As<IQueryHandler<GetCentralTrendQuery, CentralTrendOutputModel>>()
+                .InstancePerLifetimeScope();
+        }
+
+        private static void RegisterGetScatteringMeasures(ContainerBuilder builder)
+        {
+            builder
+                .RegisterType<GetScatteringMeasuresQueryHandler>()
+                .As<IQueryHandler<GetScatteringMeasuresQuery, ScatteringMeasuresOutputModel>>()
                 .InstancePerLifetimeScope();
         }
     }
