@@ -2,6 +2,8 @@
 using DataPanda.Application.Contracts.CQRS.Queries;
 using DataPanda.Application.Features.Statistics.Queries.GetCentralTrend;
 using DataPanda.Application.Features.Statistics.Queries.GetCentralTrend.Models;
+using DataPanda.Application.Features.Statistics.Queries.GetCorrelationAnalysis;
+using DataPanda.Application.Features.Statistics.Queries.GetCorrelationAnalysis.Models;
 using DataPanda.Application.Features.Statistics.Queries.GetFrequencyDistribution;
 using DataPanda.Application.Features.Statistics.Queries.GetFrequencyDistribution.Models;
 using DataPanda.Application.Features.Statistics.Queries.GetScatteringMeasures;
@@ -16,6 +18,7 @@ namespace DataPanda.Startup.IoC.Application.Features.Statistics
             RegisterGetFrequencyDistribution(builder);
             RegisterGetCentralTrend(builder);
             RegisterGetScatteringMeasures(builder);
+            RegisterGetCorrelationAnalysis(builder);
         }
 
         private static void RegisterGetFrequencyDistribution(ContainerBuilder builder)
@@ -39,6 +42,14 @@ namespace DataPanda.Startup.IoC.Application.Features.Statistics
             builder
                 .RegisterType<GetScatteringMeasuresQueryHandler>()
                 .As<IQueryHandler<GetScatteringMeasuresQuery, ScatteringMeasuresOutputModel>>()
+                .InstancePerLifetimeScope();
+        }
+
+        private static void RegisterGetCorrelationAnalysis(ContainerBuilder builder)
+        {
+            builder
+                .RegisterType<GetCorrelationAnalysisQueryHandler>()
+                .As<IQueryHandler<GetCorrelationAnalysisQuery, CorrelationAnalysisOutputModel>>()
                 .InstancePerLifetimeScope();
         }
     }
