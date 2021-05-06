@@ -1,7 +1,10 @@
 ﻿using Autofac;
 using DataPanda.Application.Contracts.CQRS.Queries;
+using DataPanda.Application.Features.Statistics.Queries.GetCentralTrend.Models;
 using DataPanda.Application.Features.Statistics.Queries.GetFrequencyDistribution.Models;
+using DataPanda.Application.Persistence.Features.Statistics.Queries.GetCentralTrend;
 using DataPanda.Application.Persistence.Features.Statistics.Queries.GetFrequencyDistribution;
+using DataPanda.Persistence.Features.Statistics.Queries.GetCentralTrendQuery;
 using DataPanda.Persistence.Features.Statistics.Queries.GetFrequencyDistribution;
 
 namespace DataPanda.Startup.IoC.Persistence.Statistics
@@ -18,6 +21,11 @@ namespace DataPanda.Startup.IoC.Persistence.Statistics
             builder
                 .RegisterType<GetFrequencyDistributionPersistenceQueryHandler>()
                 .As<IPersistenceQueryHandler<GetFrequencyDistributionPersistenceQuery, FrequencyDistributionOutputModel>>()
+                .InstancePerLifetimeScope();
+
+            builder
+                .RegisterType<GetCentralTrendPersistenceQueryHandler>()
+                .As<IPersistenceQueryHandler<GetCentralTrendPersistenceQuery, CentralTrendOutputModel>>()
                 .InstancePerLifetimeScope();
         }
     }
