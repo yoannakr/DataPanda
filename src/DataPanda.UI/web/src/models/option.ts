@@ -15,7 +15,7 @@ export const menuOptions: IMenuOption[] = [{
 {
 	id: 2,
 	name: "Честотно разпределение на изпълнени и качени курсови задачи и проекти",
-	path: ""
+	path: "/frequencyDistribution"
 },
 {
 	id: 3,

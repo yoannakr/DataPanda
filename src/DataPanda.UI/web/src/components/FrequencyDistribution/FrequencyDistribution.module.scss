@@ -1,0 +1,29 @@
+.MenuButton {
+  width: 15%;
+  border: 2px solid #555555;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.Table {
+  border-collapse: collapse;
+  width: 80%;
+  margin-top: 50px;
+  margin-left: 10%;
+}
+
+.Table td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.Table tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+@media only screen and (max-width: 1200px) {
+}

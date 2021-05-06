@@ -3,7 +3,8 @@ import axios from "axios";
 import { fileOptions, IOption } from "models/option";
 import { platformTypes } from "models/platformType";
 import { fieldOfApplications } from "models/fieldOfApplication";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import MenuButton from "components/common/Button/MenuButton/MenuButton";
 import { IEnrolment } from "../../models/enrolment";
 import styles from "./FileUploader.module.scss";
 import StepProgressBar from "./StepProgressBar/StepProgressBar";
@@ -98,7 +99,7 @@ const FileUploader = () => {
 		history.push("/");
 	};
 
-	result.push(<Link to="/"><button type="button" className={styles.MenuButton}>Меню</button></Link>);
+	result.push(<MenuButton />);
 
 	switch (currentStep) {
 		case 1:
