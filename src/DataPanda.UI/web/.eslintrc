@@ -51,6 +51,8 @@
         }
       }],
 	  "max-len": 0,
-	  "react/jsx-props-no-spreading": "off"
+	  "react/jsx-props-no-spreading": "off",
+	  "no-console": 0,
+	  "no-alert": 0
   }
 }
