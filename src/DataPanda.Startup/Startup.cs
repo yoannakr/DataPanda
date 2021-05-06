@@ -23,7 +23,13 @@ namespace DataPanda.Startup
         public void ConfigureServices(IServiceCollection services)
             => services
                 .AddApi()
-                .AddPersistence(Configuration);
+                .AddPersistence(Configuration)
+                .AddCors(o => o.AddPolicy("MyPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                          .AllowAnyHeader();
+                }));
 
         public void ConfigureContainer(ContainerBuilder builder)
             => builder
@@ -41,6 +47,8 @@ namespace DataPanda.Startup
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("MyPolicy");
 
             app.UseAuthorization();
 

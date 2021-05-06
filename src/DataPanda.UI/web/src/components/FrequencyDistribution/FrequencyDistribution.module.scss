@@ -25,5 +25,21 @@ th {
   background-color: #dddddd;
 }
 
-@media only screen and (max-width: 1200px) {
+.Form {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.Form span + input {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.GetButton {
+  border: 2px solid #555555;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  font-size: 17px;
 }
