@@ -1,6 +1,8 @@
 ﻿using DataPanda.Application.Contracts.CQRS.Queries;
 using DataPanda.Application.Features.Statistics.Queries.GetCentralTrend;
 using DataPanda.Application.Features.Statistics.Queries.GetCentralTrend.Models;
+using DataPanda.Application.Features.Statistics.Queries.GetCorrelationAnalysis;
+using DataPanda.Application.Features.Statistics.Queries.GetCorrelationAnalysis.Models;
 using DataPanda.Application.Features.Statistics.Queries.GetFrequencyDistribution;
 using DataPanda.Application.Features.Statistics.Queries.GetFrequencyDistribution.Models;
 using DataPanda.Application.Features.Statistics.Queries.GetScatteringMeasures;
@@ -15,15 +17,18 @@ namespace DataPanda.Api.Controllers
         private readonly IQueryHandler<GetFrequencyDistributionQuery, FrequencyDistributionOutputModel> getFrequencyDistributionQueryHandler;
         private readonly IQueryHandler<GetCentralTrendQuery, CentralTrendOutputModel> getCentralTrendQueryHandler;
         private readonly IQueryHandler<GetScatteringMeasuresQuery, ScatteringMeasuresOutputModel> getScatteringMeasuresQueryHandler;
+        private readonly IQueryHandler<GetCorrelationAnalysisQuery, CorrelationAnalysisOutputModel> getCorrelationAnalysisQueryHandler;
 
         public StatisticsController(
             IQueryHandler<GetFrequencyDistributionQuery, FrequencyDistributionOutputModel> getFrequencyDistributionQueryHandler,
             IQueryHandler<GetCentralTrendQuery, CentralTrendOutputModel> getCentralTrendQueryHandler,
-            IQueryHandler<GetScatteringMeasuresQuery, ScatteringMeasuresOutputModel> getScatteringMeasuresQueryHandler)
+            IQueryHandler<GetScatteringMeasuresQuery, ScatteringMeasuresOutputModel> getScatteringMeasuresQueryHandler,
+            IQueryHandler<GetCorrelationAnalysisQuery, CorrelationAnalysisOutputModel> getCorrelationAnalysisQueryHandler)
         {
             this.getFrequencyDistributionQueryHandler = getFrequencyDistributionQueryHandler;
             this.getCentralTrendQueryHandler = getCentralTrendQueryHandler;
             this.getScatteringMeasuresQueryHandler = getScatteringMeasuresQueryHandler;
+            this.getCorrelationAnalysisQueryHandler = getCorrelationAnalysisQueryHandler;
         }
 
         [HttpGet]
@@ -46,6 +51,14 @@ namespace DataPanda.Api.Controllers
         public async Task<ActionResult> ScatteringMeasures()
         {
             var result = await getScatteringMeasuresQueryHandler.Handle(new GetScatteringMeasuresQuery());
+
+            return new OkObjectResult(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> CorrelationAnalysis()
+        {
+            var result = await getCorrelationAnalysisQueryHandler.Handle(new GetCorrelationAnalysisQuery());
 
             return new OkObjectResult(result);
         }
