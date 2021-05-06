@@ -23,6 +23,7 @@ namespace DataPanda.Persistence.Features.Statistics.Queries.GetCorrelationAnalys
             var enrolments = await context.Enrolments
                 .Include(enrolment => enrolment.EnrolmentWikis)
                 .Include(enrolment => enrolment.Course)
+                .Where(enrolment => enrolment.Course.Name == query.CourseName)
                 .ToListAsync();
             var correlations = new List<GradeAndWikiEditCorrelation>();
 

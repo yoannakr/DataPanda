@@ -5,5 +5,11 @@ namespace DataPanda.Application.Features.Statistics.Queries.GetCorrelationAnalys
 {
     public class GetCorrelationAnalysisQuery : IQuery<CorrelationAnalysisOutputModel>
     {
+        public GetCorrelationAnalysisQuery(string courseName)
+        {
+            CourseName = courseName;
+        }
+
+        public string CourseName { get; }
     }
 }

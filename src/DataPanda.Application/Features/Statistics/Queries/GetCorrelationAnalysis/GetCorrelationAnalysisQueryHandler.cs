@@ -15,6 +15,6 @@ namespace DataPanda.Application.Features.Statistics.Queries.GetCorrelationAnalys
         }
 
         public async Task<CorrelationAnalysisOutputModel> Handle(GetCorrelationAnalysisQuery query)
-            => await getCorrelationAnalysisPersistenceQueryHandler.Handle(new GetCorrelationAnalysisPersistenceQuery());
+            => await getCorrelationAnalysisPersistenceQueryHandler.Handle(new GetCorrelationAnalysisPersistenceQuery(query.CourseName));
     }
 }

@@ -56,9 +56,9 @@ namespace DataPanda.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> CorrelationAnalysis()
+        public async Task<ActionResult> CorrelationAnalysis(string courseName)
         {
-            var result = await getCorrelationAnalysisQueryHandler.Handle(new GetCorrelationAnalysisQuery());
+            var result = await getCorrelationAnalysisQueryHandler.Handle(new GetCorrelationAnalysisQuery(courseName));
 
             return new OkObjectResult(result);
         }

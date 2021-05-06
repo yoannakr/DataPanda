@@ -5,5 +5,11 @@ namespace DataPanda.Application.Persistence.Features.Statistics.Queries.GetCorre
 {
     public class GetCorrelationAnalysisPersistenceQuery : IPersistenceQuery<CorrelationAnalysisOutputModel>
     {
+        public GetCorrelationAnalysisPersistenceQuery(string courseName)
+        {
+            CourseName = courseName;
+        }
+
+        public string CourseName { get; }
     }
 }
