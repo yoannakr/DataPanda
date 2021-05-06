@@ -20,7 +20,18 @@ namespace DataPanda.Persistence.Features.Statistics.Queries.GetFrequencyDistribu
 
         public async Task<FrequencyDistributionOutputModel> Handle(GetFrequencyDistributionPersistenceQuery query)
         {
-            var fileSubmissions = await context.FileSubmissions.ToListAsync();
+            var fileSubmissions = await context.FileSubmissions
+                .Include(fileSubmission => fileSubmission.EnrolmentAssignment)
+                    .ThenInclude(enrolmentAssignment => enrolmentAssignment.Enrolment)
+                        .ThenInclude(enrolment => enrolment.Course)
+                .Include(fileSubmission => fileSubmission.EnrolmentAssignment)
+                    .ThenInclude(enrolmentAssignment => enrolmentAssignment.Enrolment)
+                        .ThenInclude(enrolment => enrolment.LearningPlatform)
+                .Where(fileSubmission
+                    => fileSubmission.EnrolmentAssignment.Enrolment.Course.Name == query.CourseName &&
+                        fileSubmission.EnrolmentAssignment.Enrolment.LearningPlatform.Name == query.PlatformName)
+                .ToListAsync();
+
             var fileSubmissionGroups = fileSubmissions.GroupBy(fileSubmission => fileSubmission.NumberOfFiles).ToList();
 
             var frequencyDistributions = new List<FrequencyDistribution>();

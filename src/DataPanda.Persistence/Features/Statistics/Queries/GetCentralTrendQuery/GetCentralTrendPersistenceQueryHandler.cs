@@ -18,7 +18,18 @@ namespace DataPanda.Persistence.Features.Statistics.Queries.GetCentralTrendQuery
 
         public async Task<CentralTrendOutputModel> Handle(GetCentralTrendPersistenceQuery query)
         {
-            var fileSubmissions = await context.FileSubmissions.ToListAsync();
+            var fileSubmissions = await context.FileSubmissions
+                .Include(fileSubmission => fileSubmission.EnrolmentAssignment)
+                    .ThenInclude(enrolmentAssignment => enrolmentAssignment.Enrolment)
+                        .ThenInclude(enrolment => enrolment.Course)
+                .Include(fileSubmission => fileSubmission.EnrolmentAssignment)
+                    .ThenInclude(enrolmentAssignment => enrolmentAssignment.Enrolment)
+                        .ThenInclude(enrolment => enrolment.LearningPlatform)
+                .Where(fileSubmission
+                    => fileSubmission.EnrolmentAssignment.Enrolment.Course.Name == query.CourseName &&
+                        fileSubmission.EnrolmentAssignment.Enrolment.LearningPlatform.Name == query.PlatformName)
+                .ToListAsync();
+
             var fileSubmissionGroups = fileSubmissions
                 .GroupBy(fileSubmission => fileSubmission.NumberOfFiles)
                 .OrderBy(fileSubmissionGroup => fileSubmissionGroup.Count())

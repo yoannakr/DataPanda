@@ -5,5 +5,14 @@ namespace DataPanda.Application.Persistence.Features.Statistics.Queries.GetFrequ
 {
     public class GetFrequencyDistributionPersistenceQuery : IPersistenceQuery<FrequencyDistributionOutputModel>
     {
+        public GetFrequencyDistributionPersistenceQuery(string courseName, string platformName)
+        {
+            CourseName = courseName;
+            PlatformName = platformName;
+        }
+
+        public string CourseName { get; }
+
+        public string PlatformName { get; }
     }
 }

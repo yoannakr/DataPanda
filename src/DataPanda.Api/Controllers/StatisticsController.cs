@@ -32,25 +32,25 @@ namespace DataPanda.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> FrequencyDistribution()
+        public async Task<ActionResult> FrequencyDistribution(string courseName, string platformName)
         {
-            var result = await getFrequencyDistributionQueryHandler.Handle(new GetFrequencyDistributionQuery());
+            var result = await getFrequencyDistributionQueryHandler.Handle(new GetFrequencyDistributionQuery(courseName, platformName));
 
             return new OkObjectResult(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult> CentralTrend()
+        public async Task<ActionResult> CentralTrend(string courseName, string platformName)
         {
-            var result = await getCentralTrendQueryHandler.Handle(new GetCentralTrendQuery());
+            var result = await getCentralTrendQueryHandler.Handle(new GetCentralTrendQuery(courseName, platformName));
 
             return new OkObjectResult(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult> ScatteringMeasures()
+        public async Task<ActionResult> ScatteringMeasures(string courseName, string platformName)
         {
-            var result = await getScatteringMeasuresQueryHandler.Handle(new GetScatteringMeasuresQuery());
+            var result = await getScatteringMeasuresQueryHandler.Handle(new GetScatteringMeasuresQuery(courseName, platformName));
 
             return new OkObjectResult(result);
         }

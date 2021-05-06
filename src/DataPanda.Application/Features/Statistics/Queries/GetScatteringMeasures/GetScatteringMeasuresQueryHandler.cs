@@ -15,6 +15,6 @@ namespace DataPanda.Application.Features.Statistics.Queries.GetScatteringMeasure
         }
 
         public async Task<ScatteringMeasuresOutputModel> Handle(GetScatteringMeasuresQuery query)
-            => await getScatteringMeasuresPersistenceQueryHandler.Handle(new GetScatteringMeasuresPersistenceQuery());
+            => await getScatteringMeasuresPersistenceQueryHandler.Handle(new GetScatteringMeasuresPersistenceQuery(query.CourseName, query.PlatformName));
     }
 }

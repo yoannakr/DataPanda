@@ -15,6 +15,6 @@ namespace DataPanda.Application.Features.Statistics.Queries.GetFrequencyDistribu
         }
 
         public async Task<FrequencyDistributionOutputModel> Handle(GetFrequencyDistributionQuery query)
-            => await getFrequencyDistributionPersistenceQueryHandler.Handle(new GetFrequencyDistributionPersistenceQuery());
+            => await getFrequencyDistributionPersistenceQueryHandler.Handle(new GetFrequencyDistributionPersistenceQuery(query.CourseName, query.PlatformName));
     }
 }
