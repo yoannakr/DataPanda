@@ -36,7 +36,7 @@ namespace DataPanda.Persistence.Features.Statistics.Queries.GetCentralTrendQuery
                 (double)(fileSubmissionGroups[middleGroupIndex].Key + fileSubmissionGroups[middleGroupIndex + 1].Key) / 2;
 
             var average = (double)fileSubmissionGroups.Sum(fileSubmissionGroup => fileSubmissionGroup.Key) / (double)fileSubmissionGroups.Count();
-            var averaggeWithWeight = (double)fileSubmissionGroups.Sum(fileSubmissionGroup => fileSubmissionGroup.Key * fileSubmissionGroup.Count()) / (double)fileSubmissionGroups.Sum(fileSubmissionGroup => fileSubmissionGroup.Count());
+            var averaggeWithWeight = fileSubmissions.Average(fileSubmission => fileSubmission.NumberOfFiles);
 
             return new CentralTrendOutputModel(mode, modeFrequency, median, average, averaggeWithWeight);
         }
