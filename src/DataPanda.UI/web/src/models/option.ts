@@ -20,7 +20,7 @@ export const menuOptions: IMenuOption[] = [{
 {
 	id: 3,
 	name: "Определяне на мерки на централната тенденция за изпълнени и качени курсови задачи и проекти",
-	path: ""
+	path: "/centralTrend"
 },
 {
 	id: 4,
