@@ -25,7 +25,7 @@ export const menuOptions: IMenuOption[] = [{
 {
 	id: 4,
 	name: "Мерки на разсейване за изпълнени и качени курсови задачи и проекти",
-	path: ""
+	path: "/scatteringMeasures"
 },
 {
 	id: 5,
