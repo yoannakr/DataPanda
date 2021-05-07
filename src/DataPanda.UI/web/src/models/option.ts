@@ -30,7 +30,7 @@ export const menuOptions: IMenuOption[] = [{
 {
 	id: 5,
 	name: "Корелационен анализ на брой редактирани Wiki",
-	path: ""
+	path: "/correlationAnalysis"
 }
 ];
 
