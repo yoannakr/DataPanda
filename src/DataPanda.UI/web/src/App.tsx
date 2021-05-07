@@ -6,6 +6,7 @@ import FileUploader from "./components/FileUploader/FileUploader";
 import FrequencyDistribution from "./components/FrequencyDistribution/FrequencyDistribution";
 import CentralTrend from "./components/CentralTrend/CentralTrend";
 import ScatteringMeasures from "./components/ScatteringMeasures/ScatteringMeasures";
+import CorrelationAnalysis from "./components/CorrelationAnalysis/CorrelationAnalysis";
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 				<Route path="/frequencyDistribution" exact component={FrequencyDistribution} />
 				<Route path="/centralTrend" exact component={CentralTrend} />
 				<Route path="/scatteringMeasures" exact component={ScatteringMeasures} />
+				<Route path="/correlationAnalysis" exact component={CorrelationAnalysis} />
 			</Switch>
 		</Router>
 	);
