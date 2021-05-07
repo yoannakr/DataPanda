@@ -1,4 +1,4 @@
-export interface FrequencyDataDistribution {
+export interface IFrequencyDataDistribution {
 	numberOfSubmissions: number;
 
 	absoluteFrequency: number;

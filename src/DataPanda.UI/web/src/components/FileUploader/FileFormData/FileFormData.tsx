@@ -6,7 +6,7 @@ import { fieldOfApplications, IFieldOfApplication } from "../../../models/fieldO
 
 interface IProps {
 	enrolment: IEnrolment;
-	updateEnrolment: any;
+	updateEnrolment: Function;
 }
 
 const FormData: React.FC<IProps> = ({ enrolment, updateEnrolment }) => {

@@ -4,7 +4,7 @@ import { IOption } from "../../../models/option";
 
 interface IProps {
 	fileOptions: IOption[];
-	selectOption: any;
+	selectOption: Function;
 	selectedOption: IOption | undefined;
 }
 

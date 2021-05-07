@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import MenuButton from "components/common/Button/MenuButton/MenuButton";
-import { FrequencyDataDistribution } from "../../models/frequency";
+import { IFrequencyDataDistribution } from "../../models/frequency";
 import styles from "./FrequencyDistribution.module.scss";
 
 export class FrequencyData {
-	frequencyDistributions: FrequencyDataDistribution[] = [];
+	frequencyDistributions: IFrequencyDataDistribution[] = [];
 
 	totalAbsoluteFrequency: number = 0;
 

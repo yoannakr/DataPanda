@@ -24,7 +24,7 @@ const ScatteringMeasures = () => {
 		setCourseName(name);
 	};
 
-	const getCentralTrend = () => {
+	const getScatteringMeasuresData = () => {
 		if (platformNameInput === "" || courseNameInput === "") {
 			alert("Попълни данните!");
 			return;
@@ -45,7 +45,7 @@ const ScatteringMeasures = () => {
 				<input type="text" placeholder="Име на платформата" value={platformNameInput} onChange={e => onNameOfPlatformChange(e.currentTarget.value)} />
 				<span>Име на дисциплината</span>
 				<input type="text" placeholder="Име на дисциплината" value={courseNameInput} onChange={e => onNameOfCourseChange(e.currentTarget.value)} />
-				<button type="button" className={styles.GetButton} onClick={getCentralTrend}>Вземи</button>
+				<button type="button" className={styles.GetButton} onClick={getScatteringMeasuresData}>Вземи</button>
 			</div>
 			<table className={styles.Table}>
 				<tr>

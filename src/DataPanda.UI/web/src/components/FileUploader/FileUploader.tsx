@@ -23,6 +23,7 @@ const FileUploader = () => {
 		fieldOfApplication: fieldOfApplications[0],
 		files: []
 	};
+
 	const [enrolment, setEnrolment] = useState<IEnrolment>(defaultEnrolment);
 	const result = [];
 	const countOfSteps = 3;

@@ -6,7 +6,7 @@ import styles from "./FileSelection.module.scss";
 
 interface IProps {
 	enrolment: IEnrolment;
-	updateEnrolment: any;
+	updateEnrolment: Function;
 	selectedOption: IOption | undefined;
 }
 
