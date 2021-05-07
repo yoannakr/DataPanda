@@ -48,9 +48,6 @@ const FrequencyDistribution = () => {
 				<input type="text" placeholder="Име на дисциплината" value={courseNameInput} onChange={e => onNameOfCourseChange(e.currentTarget.value)} />
 				<button type="button" className={styles.GetButton} onClick={getFrequencyDistribution}>Вземи</button>
 			</div>
-			{/* {comments.map(comment => (
-				<h1>{comment.totalAbsoluteFrequency}</h1>
-			))} */}
 			<table className={styles.Table}>
 				<tr>
 					<th>Брой качени файлове </th>
