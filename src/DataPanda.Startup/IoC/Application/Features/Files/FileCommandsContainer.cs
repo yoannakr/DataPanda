@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using DataPanda.Application.Common.Decorators;
 using DataPanda.Application.Contracts.CQRS.Commands;
 using DataPanda.Application.Contracts.CQRS.Results;
 using DataPanda.Application.Features.Files.Commands.Upload;
@@ -31,6 +32,9 @@ namespace DataPanda.Startup.IoC.Application.Features.Files
 
             builder
                 .RegisterDecorator<EnsureCourseExistsCommandDecorator<UploadFileCommand>, ICommandHandler<UploadFileCommand, Result>>();
+
+            builder
+                .RegisterDecorator<ErrorHandlingCommandDecorator<UploadFileCommand, Result>, ICommandHandler<UploadFileCommand, Result>>();
         }
 
         private static void RegisterUploadMultiple(ContainerBuilder builder)
@@ -45,6 +49,9 @@ namespace DataPanda.Startup.IoC.Application.Features.Files
 
             builder
                 .RegisterDecorator<EnsureCourseExistsCommandDecorator<UploadMultipleFilesCommand>, ICommandHandler<UploadMultipleFilesCommand, Result>>();
+
+            builder
+                .RegisterDecorator<ErrorHandlingCommandDecorator<UploadMultipleFilesCommand, Result>, ICommandHandler<UploadMultipleFilesCommand, Result>>();
         }
 
         private static void RegisterUploadArchive(ContainerBuilder builder)
@@ -59,6 +66,9 @@ namespace DataPanda.Startup.IoC.Application.Features.Files
 
             builder
                 .RegisterDecorator<EnsureCourseExistsCommandDecorator<UploadFileArchiveCommand>, ICommandHandler<UploadFileArchiveCommand, Result>>();
+
+            builder
+                .RegisterDecorator<ErrorHandlingCommandDecorator<UploadFileArchiveCommand, Result>, ICommandHandler<UploadFileArchiveCommand, Result>>();
         }
 
         private static void RegisterCommonProcess(ContainerBuilder builder)

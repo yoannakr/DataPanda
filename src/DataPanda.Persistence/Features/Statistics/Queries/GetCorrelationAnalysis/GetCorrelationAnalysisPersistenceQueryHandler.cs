@@ -25,7 +25,13 @@ namespace DataPanda.Persistence.Features.Statistics.Queries.GetCorrelationAnalys
                 .Include(enrolment => enrolment.Course)
                 .Where(enrolment => enrolment.Course.Name == query.CourseName)
                 .ToListAsync();
+
             var correlations = new List<GradeAndWikiEditCorrelation>();
+
+            if (enrolments.Count == 0)
+            {
+                return new CorrelationAnalysisOutputModel(correlations, 0, 0, 0);
+            }
 
             foreach (var enrolment in enrolments)
             {

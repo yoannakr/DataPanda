@@ -31,6 +31,11 @@ namespace DataPanda.Persistence.Features.Statistics.Queries.GetScatteringMeasure
                         fileSubmission.EnrolmentAssignment.Enrolment.LearningPlatform.Name == query.PlatformName)
                 .ToListAsync();
 
+            if (fileSubmissions.Count == 0)
+            {
+                return new ScatteringMeasuresOutputModel(0, 0, 0);
+            }
+
             var fileSubmissionGroups = fileSubmissions
                 .GroupBy(fileSubmission => fileSubmission.NumberOfFiles)
                 .OrderBy(fileSubmissionGroup => fileSubmissionGroup.Count())

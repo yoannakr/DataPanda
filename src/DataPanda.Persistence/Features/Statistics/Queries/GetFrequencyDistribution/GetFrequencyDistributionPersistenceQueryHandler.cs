@@ -32,9 +32,14 @@ namespace DataPanda.Persistence.Features.Statistics.Queries.GetFrequencyDistribu
                         fileSubmission.EnrolmentAssignment.Enrolment.LearningPlatform.Name == query.PlatformName)
                 .ToListAsync();
 
-            var fileSubmissionGroups = fileSubmissions.GroupBy(fileSubmission => fileSubmission.NumberOfFiles).ToList();
-
             var frequencyDistributions = new List<FrequencyDistribution>();
+
+            if (fileSubmissions.Count == 0)
+            {
+                return new FrequencyDistributionOutputModel(frequencyDistributions, 0, 0);
+            }
+
+            var fileSubmissionGroups = fileSubmissions.GroupBy(fileSubmission => fileSubmission.NumberOfFiles).ToList();
 
             var totalAbsoluteFrequency = fileSubmissionGroups
                 .Sum(fileSubmissionGroup => fileSubmissionGroup.Count());
