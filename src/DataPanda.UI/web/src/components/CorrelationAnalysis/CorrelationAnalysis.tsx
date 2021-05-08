@@ -57,6 +57,9 @@ const CorrelationAnalysis = () => {
 				} else if (correlationAnalysisData.correlation === 0) {
 					setcorrelationText("Липсва зависимост");
 				}
+			})
+			.catch(() => {
+				alert("Неуспешно!");
 			});
 	};
 
@@ -66,7 +69,7 @@ const CorrelationAnalysis = () => {
 			<div className={styles.Form}>
 				<span>Име на дисциплината</span>
 				<input type="text" placeholder="Име на дисциплината" value={courseNameInput} onChange={e => onNameOfCourseChange(e.currentTarget.value)} />
-				<button type="button" className={styles.GetButton} onClick={getCorrelationAnalysis}>Вземи</button>
+				<button type="button" className={styles.GetButton} onClick={getCorrelationAnalysis}>Вземане на данни</button>
 			</div>
 			<div className={styles.Result}>
 				<span>Корелация: </span>
