@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import MenuButton from "components/common/Button/MenuButton/MenuButton";
-import { FrequencyDataDistribution } from "../../models/frequency";
+import { IFrequencyDataDistribution } from "../../models/frequency";
 import styles from "./FrequencyDistribution.module.scss";
 
 export class FrequencyData {
-	frequencyDistributions: FrequencyDataDistribution[] = [];
+	frequencyDistributions: IFrequencyDataDistribution[] = [];
 
 	totalAbsoluteFrequency: number = 0;
 
@@ -34,6 +34,10 @@ const FrequencyDistribution = () => {
 		axios.get(`https://localhost:44364/api/statistics/FrequencyDistribution?courseName=${courseNameInput}&platformName=${platformNameInput}`)
 			.then(response => {
 				const newFrequencyData: FrequencyData = Object.assign(new FrequencyData(), response.data);
+				if (newFrequencyData.frequencyDistributions.length === 0) {
+					alert("Неуспешно! Проверете входните данни.");
+					return;
+				}
 				setFrequencyData(newFrequencyData);
 			});
 	};
@@ -46,7 +50,7 @@ const FrequencyDistribution = () => {
 				<input type="text" placeholder="Име на платформата" value={platformNameInput} onChange={e => onNameOfPlatformChange(e.currentTarget.value)} />
 				<span>Име на дисциплината</span>
 				<input type="text" placeholder="Име на дисциплината" value={courseNameInput} onChange={e => onNameOfCourseChange(e.currentTarget.value)} />
-				<button type="button" className={styles.GetButton} onClick={getFrequencyDistribution}>Вземи</button>
+				<button type="button" className={styles.GetButton} onClick={getFrequencyDistribution}>Вземане на данни</button>
 			</div>
 			<table className={styles.Table}>
 				<tr>

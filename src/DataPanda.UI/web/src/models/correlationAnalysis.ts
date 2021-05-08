@@ -1,4 +1,4 @@
-export interface GradeAndWikiEditCorrelations {
+export interface IGradeAndWikiEditCorrelations {
 		studentId: number;
 		courseName: number;
 	    grade: number;

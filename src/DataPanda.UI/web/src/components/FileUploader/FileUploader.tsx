@@ -23,6 +23,7 @@ const FileUploader = () => {
 		fieldOfApplication: fieldOfApplications[0],
 		files: []
 	};
+
 	const [enrolment, setEnrolment] = useState<IEnrolment>(defaultEnrolment);
 	const result = [];
 	const countOfSteps = 3;
@@ -73,7 +74,14 @@ const FileUploader = () => {
 			paramsInput.append("CourseFieldOfApplication", enrolment.fieldOfApplication.name);
 			paramsInput.append("FormFile", enrolment.files[0].content);
 
-			axios.post("https://localhost:44364/api/file/Upload", paramsInput);
+			axios.post("https://localhost:44364/api/file/Upload", paramsInput)
+				.then(() => {
+					alert("Успешно прикачване!");
+					history.push("/");
+				})
+				.catch(() => {
+					alert("Неуспешно прикачване!");
+				});
 		} else if (selectedOption?.id === 2) {
 			const paramsInput = new FormData();
 			paramsInput.append("PlatformName", enrolment.nameOfPlatform);
@@ -83,7 +91,14 @@ const FileUploader = () => {
 			paramsInput.append("CourseFieldOfApplication", enrolment.fieldOfApplication.name);
 			enrolment.files.map(file => paramsInput.append("FormFiles", file.content));
 
-			axios.post("https://localhost:44364/api/file/UploadMultiple", paramsInput);
+			axios.post("https://localhost:44364/api/file/UploadMultiple", paramsInput)
+				.then(() => {
+					alert("Успешно прикачване!");
+					history.push("/");
+				})
+				.catch(() => {
+					alert("Неуспешно прикачване!");
+				});
 		} else if (selectedOption?.id === 3) {
 			const paramsInput = new FormData();
 			paramsInput.append("PlatformName", enrolment.nameOfPlatform);
@@ -93,10 +108,15 @@ const FileUploader = () => {
 			paramsInput.append("CourseFieldOfApplication", enrolment.fieldOfApplication.name);
 			paramsInput.append("FormFile", enrolment.files[0].content);
 
-			axios.post("https://localhost:44364/api/file/UploadArchive", paramsInput);
+			axios.post("https://localhost:44364/api/file/UploadArchive", paramsInput)
+				.then(() => {
+					alert("Успешно прикачване!");
+					history.push("/");
+				})
+				.catch(() => {
+					alert("Неуспешно прикачване!");
+				});
 		}
-
-		history.push("/");
 	};
 
 	result.push(<MenuButton />);

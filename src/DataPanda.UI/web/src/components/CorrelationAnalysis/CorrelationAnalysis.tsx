@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import MenuButton from "components/common/Button/MenuButton/MenuButton";
 import styles from "./CorrelationAnalysis.module.scss";
-import { GradeAndWikiEditCorrelations } from "../../models/correlationAnalysis";
+import { IGradeAndWikiEditCorrelations } from "../../models/correlationAnalysis";
 
 export class CorrelationAnalysisData {
-	gradeAndWikiEditCorrelations: GradeAndWikiEditCorrelations[] = [];
+	gradeAndWikiEditCorrelations: IGradeAndWikiEditCorrelations[] = [];
 
 	totalGrades: number = 0;
 
@@ -24,7 +24,7 @@ const CorrelationAnalysis = () => {
 		setCourseName(name);
 	};
 
-	const getCentralTrend = () => {
+	const getCorrelationAnalysis = () => {
 		if (courseNameInput === "") {
 			alert("Попълни данните!");
 			return;
@@ -57,6 +57,9 @@ const CorrelationAnalysis = () => {
 				} else if (correlationAnalysisData.correlation === 0) {
 					setcorrelationText("Липсва зависимост");
 				}
+			})
+			.catch(() => {
+				alert("Неуспешно!");
 			});
 	};
 
@@ -66,7 +69,7 @@ const CorrelationAnalysis = () => {
 			<div className={styles.Form}>
 				<span>Име на дисциплината</span>
 				<input type="text" placeholder="Име на дисциплината" value={courseNameInput} onChange={e => onNameOfCourseChange(e.currentTarget.value)} />
-				<button type="button" className={styles.GetButton} onClick={getCentralTrend}>Вземи</button>
+				<button type="button" className={styles.GetButton} onClick={getCorrelationAnalysis}>Вземане на данни</button>
 			</div>
 			<div className={styles.Result}>
 				<span>Корелация: </span>

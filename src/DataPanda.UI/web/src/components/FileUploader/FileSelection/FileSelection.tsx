@@ -6,7 +6,7 @@ import styles from "./FileSelection.module.scss";
 
 interface IProps {
 	enrolment: IEnrolment;
-	updateEnrolment: any;
+	updateEnrolment: Function;
 	selectedOption: IOption | undefined;
 }
 
@@ -25,7 +25,7 @@ const FileSelection: React.FC<IProps> = ({ enrolment, updateEnrolment, selectedO
 		fileProps.accept = ".xls,.xlsx";
 		fileProps.multiple = true;
 	} else if (selectedOption?.id === 3) {
-		fileProps.accept = ".zip,.rar,.7zip";
+		fileProps.accept = ".zip,.7zip";
 		fileProps.multiple = false;
 	}
 
