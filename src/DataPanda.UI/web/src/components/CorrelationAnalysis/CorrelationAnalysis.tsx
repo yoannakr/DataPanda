@@ -33,30 +33,33 @@ const CorrelationAnalysis = () => {
 		axios.get(`https://localhost:44364/api/statistics/CorrelationAnalysis?courseName=${courseNameInput}`)
 			.then(response => {
 				const newCorrelationAnalysisData: CorrelationAnalysisData = Object.assign(new CorrelationAnalysisData(), response.data);
-				newCorrelationAnalysisData.correlation = Math.abs(newCorrelationAnalysisData.correlation);
-				setCorrelationAnalysisData(newCorrelationAnalysisData);
-
-				if (correlationAnalysisData.correlation < 0) {
+				if (newCorrelationAnalysisData.correlation < 0) {
 					setcorrelationDirection("отрицателна");
 				} else {
 					setcorrelationDirection("положителна");
 				}
 
-				if (correlationAnalysisData.correlation <= 0.3) {
-					setcorrelationText("Зависимостта е слаба");
-				} else if (correlationAnalysisData.correlation <= 0.5) {
-					setcorrelationText("Умерена зависимост");
-				} else if (correlationAnalysisData.correlation <= 0.7) {
-					setcorrelationText("Значителна зависимост");
-				} else if (correlationAnalysisData.correlation <= 0.9) {
-					setcorrelationText("Силна зависимост");
-				} else if (correlationAnalysisData.correlation > 0.9 || correlationAnalysisData.correlation !== 1) {
-					setcorrelationText("Много силна зависимост");
-				} else if (correlationAnalysisData.correlation === 1) {
-					setcorrelationText("Зависимостта е функционална");
-				} else if (correlationAnalysisData.correlation === 0) {
-					setcorrelationText("Липсва зависимост");
+				newCorrelationAnalysisData.correlation = Math.abs(newCorrelationAnalysisData.correlation);
+				let tmpCorrelcationText = "";
+
+				if (newCorrelationAnalysisData.correlation <= 0.3) {
+					tmpCorrelcationText = "Зависимостта е слаба";
+				} else if (newCorrelationAnalysisData.correlation <= 0.5) {
+					tmpCorrelcationText = "Умерена зависимост";
+				} else if (newCorrelationAnalysisData.correlation <= 0.7) {
+					tmpCorrelcationText = "Значителна зависимост";
+				} else if (newCorrelationAnalysisData.correlation <= 0.9) {
+					tmpCorrelcationText = "Силна зависимост";
+				} else if (newCorrelationAnalysisData.correlation > 0.9 || newCorrelationAnalysisData.correlation !== 1) {
+					tmpCorrelcationText = "Много силна зависимост";
+				} else if (newCorrelationAnalysisData.correlation === 1) {
+					tmpCorrelcationText = "Зависимостта е функционална";
+				} else if (newCorrelationAnalysisData.correlation === 0) {
+					tmpCorrelcationText = "Липсва зависимост";
 				}
+
+				setCorrelationAnalysisData(newCorrelationAnalysisData);
+				setcorrelationText(tmpCorrelcationText);
 			})
 			.catch(() => {
 				alert("Неуспешно!");
